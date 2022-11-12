@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -47,10 +48,11 @@ class LoginActivity : AppCompatActivity() {
                         doLogin(userEmail, password)
                 }
 
-                binding.btnSignup.setOnClickListener {
-                        val userEmail = binding.textID.text.toString()
-                        val password = binding.textPWD.text.toString()
-                        doSignUp(userEmail, password)
+
+                binding.signup.setOnClickListener {
+                        startActivity(
+                                Intent(this, SignupActivity::class.java))
+                        finish()
                 }
         }
         var googleLogInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -78,6 +80,8 @@ class LoginActivity : AppCompatActivity() {
                         Log.w(TAG, "signInResult:failed code=" + e.statusCode)
                 }
         }
+
+
 
 
         private fun doLogin(userEmail: String, password: String) {
