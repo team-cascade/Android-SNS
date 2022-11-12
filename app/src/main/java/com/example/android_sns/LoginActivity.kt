@@ -21,10 +21,15 @@ class LoginActivity : AppCompatActivity() {
                         doLogin(userEmail, password)
                 }
 
+//                binding.signup.setOnClickListener {
+//                        val userEmail = binding.username.text.toString()
+//                        val password = binding.password.text.toString()
+//                        doSignUp(userEmail, password)
+//                }
                 binding.signup.setOnClickListener {
-                        val userEmail = binding.username.text.toString()
-                        val password = binding.password.text.toString()
-                        doSignUp(userEmail, password)
+                        startActivity(
+                                Intent(this, SignupActivity::class.java))
+                        finish()
                 }
         }
 

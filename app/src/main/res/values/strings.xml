@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Android-SNS</string>
+    <string name="name">NAME</string>
+    <string name="ID">ID</string>
+    <string name="InputName">Name</string>
+    <string name="E_mail">E_mail</string>
+    <string name="pw">PW</string>
+    <string name="pw_hint">*******</string>
+    <string name="birth">BIRTH</string>
+    <string name="birth_input">yyyymmdd</string>
+    <string name="ID_Email">EMAIL</string>
+    <string name="signup">SIGNUP</string>
+    <string name="back">BACK</string>
+
 </resources>
