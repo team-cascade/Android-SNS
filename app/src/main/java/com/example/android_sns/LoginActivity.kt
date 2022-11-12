@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
                         }
         }
-
+        
         private fun doSignUp(userEmail: String, password: String) {
                 Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
                         .addOnCompleteListener(this) {
