@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android_sns.databinding.ActivityLoginBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -27,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
                         doSignUp(userEmail, password)
                 }
         }
+
+
 
         private fun doLogin(userEmail: String, password: String) {
                 Firebase.auth.signInWithEmailAndPassword(userEmail, password)
