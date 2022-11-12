@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Android-SNS</string>
+    <!--  Bottom Navigation View  -->
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
+    <string name="message">Message</string>
+    <string name="profile">Profile</string>
 </resources>
