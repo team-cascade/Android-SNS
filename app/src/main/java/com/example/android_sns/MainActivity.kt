@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         bottomNavigationView = binding.bottomNavigation
 
         supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
@@ -34,6 +33,8 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.fragment, MessageFragment()).commit()
                 R.id.profileFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, ProfileFragment()).commit()
+                R.id.uploadFragment -> supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, UploadFragment()).commit()
             }
             true
         } )
