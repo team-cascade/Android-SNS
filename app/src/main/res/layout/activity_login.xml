@@ -80,17 +80,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textPWD"
         app:layout_constraintVertical_bias="0.505" />
 
-    <Button
-        android:id="@+id/btn_google"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:background="@drawable/btn_signin_google"
-        android:text="구글 로그인"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPWD"
-        app:layout_constraintVertical_bias="0.505" />
+    newsfee
 
 </androidx.constraintlayout.widget.ConstraintLayout>
