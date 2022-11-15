@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, MessageFragment()).commit()
                 R.id.profileFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, ProfileFragment()).commit()
+                    .replace(R.id.fragment, ProfileFragment2()).commit()     // 임시수정
+
             }
             true
         } )

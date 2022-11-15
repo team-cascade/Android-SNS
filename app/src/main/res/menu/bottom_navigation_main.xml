@@ -11,7 +11,7 @@
         android:enabled="true"
         android:title="@string/search"/>
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/AddPhotoFragment"
         android:icon="@drawable/ic_add_a_photo"
         android:enabled="true"
         android:title="@string/add"/>
