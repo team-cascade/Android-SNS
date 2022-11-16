@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,12 +72,33 @@ class DetailViewFragment : Fragment() {
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
                 .into(viewholder.findViewById(R.id.detailvireitem_profile_image))
 
-//            viewholder.findViewById<TextView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
-//                favoriteEvent(position)
-//            }
-//            if(contentDTOs!![position].favorites.containsKey(uid)) {
-//                viewholder.findViewById<>()
-//            }
+            viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
+                favoriteEvent(position)
+            }
+            if(contentDTOs!![position].favorites.containsKey(uid)) {
+                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite)
+
+            }else {
+                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
+            }
+        }
+        fun favoriteEvent(position: Int) {
+            var tsDoc = firestore?.collection("images")?.document(contentUIDList[position])
+            firestore?.runTransaction {
+                transition ->
+
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                var contentDTO = transition.get(tsDoc!!).toObject(contentDTO::class.java)
+
+                if(contentDTO!!.favorites.containsKey(uid)) {
+                    contentDTO.favoriteCount = contentDTO.favoriteCount - 1
+                    contentDTO.favorites.remove(uid)
+                } else {
+                    contentDTO.favoriteCount = contentDTO.favoriteCount + 1
+                    contentDTO.favorites[uid!!] = true
+                }
+                transition.set(tsDoc,contentDTO)
+            }
 
 
 
