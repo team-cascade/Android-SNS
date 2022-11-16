@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.detailViewFragment -> supportFragmentManager.beginTransaction()
+                R.id.homeFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, DetailViewFragment()).commit()
                 R.id.searchFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, SearchFragment()).commit()
@@ -44,5 +44,6 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, LoginActivity::class.java))
             finish()
         }
+        bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
 }
