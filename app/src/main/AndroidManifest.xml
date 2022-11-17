@@ -24,6 +24,10 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         <activity
             android:name=".MainActivity"
             android:exported="true">
