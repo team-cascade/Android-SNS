@@ -34,20 +34,15 @@ class MainActivity : AppCompatActivity() {
         val goUploadIntent = Intent(this, UploadActivity::class.java)
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.homeFragment -> supportFragmentManager.beginTransaction()
+                R.id.detailViewFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, DetailViewFragment()).commit()
                 R.id.searchFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, SearchFragment()).commit()
                 R.id.messageFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, MessageFragment()).commit()
                 R.id.profileFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, ProfileFragment2()).commit()     // 임시수정
-                    //.replace(R.id.fragment, ProfileFragment()).commit()
-                // Activity
+                    .replace(R.id.fragment, ProfileFragment()).commit()
                 R.id.uploadFragment -> startActivity(goUploadIntent)
-
-                //supportFragmentManager.beginTransaction().replace(R.id.fragment, UploadActiviy()).commit()
-
             }
             true
         } )
@@ -57,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, LoginActivity::class.java))
             finish()
         }
-        bottomNavigationView!!.selectedItemId = R.id.homeFragment
+        //bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
     // 동적권한 요청
     private fun requestSinglePermission(permission: String) { // 한번에 하나의 권한만 요청하는 예제
