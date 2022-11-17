@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import model.ContentDTO
 
 
 class DetailViewFragment : Fragment() {
@@ -31,7 +32,7 @@ class DetailViewFragment : Fragment() {
     }
     @SuppressLint("NotifyDataSetChanged")
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs : ArrayList<contentDTO> = arrayListOf()
+        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUIDList : ArrayList<String> = arrayListOf()
         init {
             firestore?.collection("images")?.orderBy("timestamp")
@@ -39,7 +40,7 @@ class DetailViewFragment : Fragment() {
                     contentDTOs.clear()
                     contentUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
-                        val item = snapshot.toObject(contentDTO::class.java)
+                        val item = snapshot.toObject(ContentDTO::class.java)
                         contentDTOs.add(item!!)
                         contentUIDList.add(snapshot.id)
                     }
@@ -88,7 +89,7 @@ class DetailViewFragment : Fragment() {
                 transition ->
 
                 var uid = FirebaseAuth.getInstance().currentUser?.uid
-                var contentDTO = transition.get(tsDoc!!).toObject(contentDTO::class.java)
+                var contentDTO = transition.get(tsDoc!!).toObject(ContentDTO::class.java)
 
                 if(contentDTO!!.favorites.containsKey(uid)) {
                     contentDTO.favoriteCount = contentDTO.favoriteCount - 1
