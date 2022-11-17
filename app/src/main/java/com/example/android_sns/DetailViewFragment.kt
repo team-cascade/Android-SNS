@@ -1,59 +1,108 @@
 package com.example.android_sns
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailViewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DetailViewFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var firestore : FirebaseFirestore? = null
+    var uid : String ?= null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail_view,container,false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        firestore = FirebaseFirestore.getInstance()
+        uid = FirebaseAuth.getInstance().currentUser?.uid
+
+        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).adapter  = DetailViewRecyclerViewAdapter()
+        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).layoutManager = LinearLayoutManager(activity)
+        return view
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var contentDTOs : ArrayList<contentDTO> = arrayListOf()
+        var contentUIDList : ArrayList<String> = arrayListOf()
+        init {
+            firestore?.collection("images")?.orderBy("timestamp")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    contentDTOs.clear()
+                    contentUIDList.clear()
+                    for(snapshot in querySnapshot!!.documents) {
+                        val item = snapshot.toObject(contentDTO::class.java)
+                        contentDTOs.add(item!!)
+                        contentUIDList.add(snapshot.id)
+                    }
+                    notifyDataSetChanged()
+                }
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
+            return CustomViewHolder(view)
+        }
+
+        inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+
+        override fun getItemCount(): Int {
+            return contentDTOs.size
+        }
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            var viewholder = (holder as CustomViewHolder).itemView
+
+            viewholder.findViewById<TextView>(R.id.detailviewitem_profile_textview).text = contentDTOs!![position].userId
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
+                .into(viewholder.findViewById(R.id.detailviewitem_imageview_content))
+
+            viewholder.findViewById<TextView>(R.id.detailviewitem_explain_textview).text = contentDTOs!![position].explain
+
+            viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
+                "Likes" + contentDTOs!![position].favoriteCount
+
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
+                .into(viewholder.findViewById(R.id.detailvireitem_profile_image))
+
+            viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
+                favoriteEvent(position)
+            }
+            if(contentDTOs!![position].favorites.containsKey(uid)) {
+                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite)
+
+            }else {
+                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
+            }
+        }
+        fun favoriteEvent(position: Int) {
+            var tsDoc = firestore?.collection("images")?.document(contentUIDList[position])
+            firestore?.runTransaction {
+                transition ->
+
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                var contentDTO = transition.get(tsDoc!!).toObject(contentDTO::class.java)
+
+                if(contentDTO!!.favorites.containsKey(uid)) {
+                    contentDTO.favoriteCount = contentDTO.favoriteCount - 1
+                    contentDTO.favorites.remove(uid)
+                } else {
+                    contentDTO.favoriteCount = contentDTO.favoriteCount + 1
+                    contentDTO.favorites[uid!!] = true
+                }
+                transition.set(tsDoc,contentDTO)
+            }
+
+
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_view, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailViewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailViewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

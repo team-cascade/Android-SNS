@@ -28,6 +28,7 @@ class UploadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_upload)
         //Initiate storage
+
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         firestore = FirebaseFirestore.getInstance()

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UploadActivity">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/upload_toolbar"
             android:layout_width="match_parent"
@@ -31,6 +32,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editText"
             android:layout_below="@id/toolbar_division"
