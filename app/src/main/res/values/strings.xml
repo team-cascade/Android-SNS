@@ -23,4 +23,9 @@
     <string name="profile">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upload">Upload</string>
+    <string name="upload_image">PHOTO UPLOAD</string>
+    <string name="description">description</string>
+    <string name="no_permission">No Permission %1$s.</string>
+    <string name="req_permission_reason">Requires %1$s permission.</string>
 </resources>
