@@ -1,8 +1,12 @@
 package com.example.android_sns
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.example.android_sns.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
@@ -12,18 +16,22 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
     private var bottomNavigationView: BottomNavigationView? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 동적권한 요청
+        requestSinglePermission(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         bottomNavigationView = binding.bottomNavigation
 
         supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
             .commit()
 
+        val goUploadIntent = Intent(this, UploadActivity::class.java)
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeFragment -> supportFragmentManager.beginTransaction()
@@ -34,6 +42,11 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.fragment, MessageFragment()).commit()
                 R.id.profileFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, ProfileFragment2()).commit()     // 임시수정
+                    //.replace(R.id.fragment, ProfileFragment()).commit()
+                // Activity
+                R.id.uploadFragment -> startActivity(goUploadIntent)
+
+                //supportFragmentManager.beginTransaction().replace(R.id.fragment, UploadActiviy()).commit()
 
             }
             true
@@ -46,4 +59,30 @@ class MainActivity : AppCompatActivity() {
         }
         bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
+    // 동적권한 요청
+    private fun requestSinglePermission(permission: String) { // 한번에 하나의 권한만 요청하는 예제
+        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) // 권한 유무 확인
+            return
+        val requestPermLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { // 권한 요청 컨트랙트
+            if (it == false) { // permission is not granted!
+                AlertDialog.Builder(this).apply {
+                    setTitle("Warning")
+                    setMessage(getString(R.string.no_permission, permission))
+                }.show()
+            }
+        }
+        if (shouldShowRequestPermissionRationale(permission)) { // 권한 설명 필수 여부 확인
+// you should explain the reason why this app needs the permission.
+            AlertDialog.Builder(this).apply {
+                setTitle("Reason")
+                setMessage(getString(R.string.req_permission_reason, permission))
+                setPositiveButton("Allow") { _, _ -> requestPermLauncher.launch(permission) }
+                setNegativeButton("Deny") { _, _ -> }
+            }.show()
+        } else {
+// should be called in onCreate()
+            requestPermLauncher.launch(permission) // 권한 요청 시작
+        }
+    }
+
 }

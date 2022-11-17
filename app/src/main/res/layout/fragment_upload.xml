@@ -5,22 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UploadActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/upload_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="35dp">
-        <ImageView
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/upload_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/logo"/>
-    </androidx.appcompat.widget.Toolbar>
-    <LinearLayout
-        android:id="@+id/toolbar_division"
-        android:background="@color/cardview_light_background"
-        android:layout_below="@id/upload_toolbar"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+            android:layout_height="35dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo"/>
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:id="@+id/toolbar_division"
+            android:background="@color/cardview_light_background"
+            android:layout_below="@id/upload_toolbar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
     <ImageView
         android:id="@+id/upload_image"
@@ -31,27 +32,30 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp" />
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editText"
-        android:layout_below="@id/toolbar_division"
-        android:layout_toRightOf="@id/upload_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/uploadImage_edit_explain"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editText"
+            android:layout_below="@id/toolbar_division"
+            android:layout_toRightOf="@id/upload_image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="top"
-            android:hint="@string/hello"
-            tools:ignore="SpeakableTextPresentCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <Button
-        android:id="@+id/btn_upload"
-        android:text="@string/upload_image"
-        android:layout_below="@id/upload_image"
-        android:layout_toRightOf="@id/upload_image"
-        android:theme="@style/Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/uploadImage_edit_explain"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="top"
+                android:hint="@string/description"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btn_upload"
+            android:text="@string/upload_image"
+            android:layout_below="@id/upload_image"
+            android:layout_toRightOf="@id/upload_image"
+            android:theme="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 </RelativeLayout>
+
+

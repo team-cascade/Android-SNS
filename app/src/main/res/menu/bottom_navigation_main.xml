@@ -11,10 +11,10 @@
         android:enabled="true"
         android:title="@string/search"/>
     <item
-        android:id="@+id/AddPhotoFragment"
+        android:id="@+id/uploadFragment"
         android:icon="@drawable/ic_add_a_photo"
         android:enabled="true"
-        android:title="@string/add"/>
+        android:title="@string/upload"/>
     <item
         android:id="@+id/messageFragment"
         android:icon="@drawable/ic_chat_black"
