@@ -4,23 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android_sns.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
-        var auth : FirebaseAuth? = null
+        private lateinit var auth : FirebaseAuth
+        private lateinit var binding: ActivityLoginBinding
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-                val binding = ActivityLoginBinding.inflate(layoutInflater)
+                binding = ActivityLoginBinding.inflate(layoutInflater)
                 setContentView(binding.root)
                 auth = FirebaseAuth.getInstance()
-
 
                 binding.btnLogin.setOnClickListener {
                         val userEmail = binding.textID.text.toString()
@@ -34,9 +32,14 @@ class LoginActivity : AppCompatActivity() {
                                 Intent(this, SignupActivity::class.java))
                         finish()
                 }
+
         }
 
         private fun doLogin(userEmail: String, password: String) {
+                if(userEmail.isNullOrEmpty() || password.isNullOrEmpty()) {
+                        binding.loginErrorText.text = "이메일과 비밀번호를 입력해주세요."
+                        return
+                }
                 Firebase.auth.signInWithEmailAndPassword(userEmail, password)
                         .addOnCompleteListener(this) {
                                 if (it.isSuccessful) {
@@ -45,7 +48,17 @@ class LoginActivity : AppCompatActivity() {
                                         finish()
                                 } else {
                                         Log.w("LoginActivity", "signInWithEmail", it.exception)
-                                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                                        //Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                                        var errorMessage = it.exception?.localizedMessage
+                                        when (errorMessage) {
+                                                "The email address is badly formatted." ->
+                                                                errorMessage = "이메일이 형식에 맞지 않습니다."
+                                                "There is no user record corresponding to this identifier. The user may have been deleted." ->
+                                                                errorMessage = "존재하지 않는 유저 이메일입니다."
+                                                "The password is invalid or the user does not have a password." ->
+                                                                errorMessage = "비밀번호가 일치하지 않습니다."
+                                        }
+                                        binding.loginErrorText.text = errorMessage
                                 }
                         }
         }

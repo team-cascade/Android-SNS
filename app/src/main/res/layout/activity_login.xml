@@ -17,7 +17,7 @@
         android:id="@+id/imageView"
         android:layout_width="500dp"
         android:layout_height="300dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,6 +28,7 @@
         android:id="@+id/textID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:ems="50"
         android:hint="ID"
         android:inputType="textPersonName"
@@ -40,6 +41,7 @@
         android:id="@+id/textPWD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:ems="50"
         android:hint="PASSWORD"
         android:inputType="textPassword"
@@ -62,23 +64,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="80dp"
         android:text="회원가입"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPWD" />
 
-    <Button
-        android:id="@+id/btn_google"
+    <TextView
+        android:id="@+id/loginErrorText"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:background="@drawable/btn_signin_google"
-        android:text="구글 로그인"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text=""
+        android:textColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPWD"
-        app:layout_constraintVertical_bias="0.505" />
+        app:layout_constraintTop_toBottomOf="@+id/textPWD" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
