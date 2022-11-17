@@ -86,9 +86,10 @@
         android:backgroundTint="#E1E1E1"
         android:ems="10"
         android:hint="@string/E_mail"
+        android:textColorHint="#BABABA"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
-        android:textColor="#8C8C8C"
+        android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/Password_Input"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +99,7 @@
         android:id="@+id/Name_Input"
         android:layout_width="208dp"
         android:layout_height="49dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="55dp"
         android:layout_marginEnd="55dp"
         android:background="@color/design_default_color_background"
         android:backgroundTint="#E1E1E1"
@@ -107,14 +108,15 @@
         android:hint="@string/InputName"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textColor="#8C8C8C"
+        android:textColor="#000000"
+        android:textColorHint="#BABABA"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/Email_Input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <EditText
+    <TextView
         android:id="@+id/Birth_Input"
         android:layout_width="208dp"
         android:layout_height="49dp"
@@ -122,11 +124,12 @@
         android:background="@color/design_default_color_background"
         android:backgroundTint="#E1E1E1"
         android:backgroundTintMode="src_in"
+        android:paddingTop="15dp"
         android:ems="10"
         android:hint="@string/birth_input"
-        android:inputType="number"
+        android:textColorHint="#BABABA"
         android:textAlignment="center"
-        android:textColor="#8C8C8C"
+        android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,10 +143,11 @@
         android:background="#E1E1E1"
         android:ems="10"
         android:hint="@string/pw_hint"
+        android:textColorHint="#BABABA"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textAlignment="center"
-        android:textColor="#8C8C8C"
+        android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/Birth_Input"
         app:layout_constraintEnd_toEndOf="parent"
@@ -190,5 +194,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="Name_Input,Email_Input,Birth_Input,Password,ID,Name,Birth,Password_Input" />
+
+    <TextView
+        android:id="@+id/signupErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text=""
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Birth_Input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
