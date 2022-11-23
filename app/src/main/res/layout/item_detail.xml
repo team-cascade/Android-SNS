@@ -9,13 +9,13 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:id="@+id/detailvireitem_profile_image"
+            android:id="@+id/search_item_profile_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="7.5dp"
             android:src="@mipmap/ic_launcher"/>
         <TextView
-            android:id="@+id/detailviewitem_profile_textview"
+            android:id="@+id/search_item_profile_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="l"/>

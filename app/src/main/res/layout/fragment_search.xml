@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="380dp"
+        android:layout_height="503dp"
+        android:layout_marginLeft="40px"
+        android:layout_marginTop="400px" />
+
+    <EditText
+        android:id="@+id/searchName"
+        android:layout_width="291dp"
+        android:layout_height="61dp"
+        android:layout_marginLeft="40px"
+        android:layout_marginTop="200px"
+        android:ems="10"
+        android:hint="이름을 검색하세요"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/searchName"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/searchName"
         android:text="검색" />
 
-</FrameLayout>
+</RelativeLayout>

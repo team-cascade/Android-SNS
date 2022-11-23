@@ -41,8 +41,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, MessageFragment()).commit()
                 R.id.profileFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, ProfileFragment()).commit()
-                R.id.uploadFragment -> startActivity(goUploadIntent)
+                    .replace(R.id.fragment, ProfileFragment("")).commit()
+                R.id.uploadActivity -> {
+                    startActivity(goUploadIntent)
+                }
             }
             true
         } )
@@ -54,6 +56,11 @@ class MainActivity : AppCompatActivity() {
         }
         //bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
+
+    fun goProfileFragment(userId: String?) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment(userId)).commit()
+    }
+
     // 동적권한 요청
     private fun requestSinglePermission(permission: String) { // 한번에 하나의 권한만 요청하는 예제
         if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) // 권한 유무 확인
