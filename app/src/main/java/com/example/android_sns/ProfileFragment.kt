@@ -41,8 +41,9 @@ class ProfileFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         uid = arguments?.getString("destinationUid")
+
         currentUserUid = auth!!.currentUser?.uid
-        if(uid==null) {
+        if(uid==null || uid=="") {
             uid = auth!!.currentUser?.uid
             fragmentView?.account_btn_follow_signout?.text = getString(R.string.signout)
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
@@ -103,7 +104,6 @@ class ProfileFragment : Fragment() {
                 contentDTOp.clear()
                 for (snapshot in querySnapshot.documents) {
                     contentDTOp.add(snapshot.toObject(ContentDTO::class.java)!!)
-                    //fragmentView?.account_iv_profile?.setImageURI(contentDTOp[0].imageUrl?.toUri())
                     fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(contentDTOp[0].imageUrl?.toUri())
                         .into(fragmentView.account_iv_profile) }
                 }
