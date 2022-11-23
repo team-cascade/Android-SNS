@@ -9,7 +9,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/upload_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="40dp">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -25,37 +25,36 @@
 
     <ImageView
         android:id="@+id/upload_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_below="@id/toolbar_division"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editText"
-            android:layout_below="@id/toolbar_division"
-            android:layout_toRightOf="@id/upload_image"
+            android:layout_below="@id/upload_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/uploadImage_edit_explain"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="150dp"
                 android:layout_gravity="top"
                 android:hint="@string/description"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:id="@+id/btn_upload"
-            android:text="@string/upload_image"
-            android:layout_below="@id/upload_image"
-            android:layout_toRightOf="@id/upload_image"
-            android:theme="@style/Widget.AppCompat.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText"
+        android:text="@string/upload_image"
+        android:theme="@style/Widget.AppCompat.Button" />
 </RelativeLayout>
 
 
