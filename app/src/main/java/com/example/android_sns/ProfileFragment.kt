@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import model.ContentDTO
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ProfileFragment(userId: String?) : Fragment() {
+class ProfileFragment() : Fragment() {
 
     lateinit var fragmentView : View
     var firestore : FirebaseFirestore? = null
@@ -43,8 +44,7 @@ class ProfileFragment(userId: String?) : Fragment() {
         uid = arguments?.getString("destinationUid")
 
         currentUserUid = auth!!.currentUser?.uid
-        if(uid==null || uid=="") {
-            uid = auth!!.currentUser?.uid
+        if(currentUserUid == uid) {
             fragmentView?.account_btn_follow_signout?.text = getString(R.string.signout)
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 activity?.finish()
@@ -55,14 +55,24 @@ class ProfileFragment(userId: String?) : Fragment() {
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity,3)
 
+
+
+
         ////////////////   프로필 설정 부분   ///////////////////
         var photoUri: Uri? = null
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + "_.png"
         var storage = FirebaseStorage.getInstance()
-        var storageRef = storage?.reference?.child("profiles/uid")?.child(imageFileName)
+        var storageRef = storage?.reference?.child("profiles")?.child(imageFileName)
 
         // 콜백함수
+
+        var contentDTO: ContentDTO? = null
+        firestore?.collection("users")?.document(auth?.currentUser?.uid.toString())?.get()
+            ?.addOnSuccessListener {
+                contentDTO = it.toObject(ContentDTO::class.java)
+            }
+
         val getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -73,30 +83,42 @@ class ProfileFragment(userId: String?) : Fragment() {
                     storageRef?.putFile(photoUri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
                         return@continueWithTask storageRef.downloadUrl
                     }?.addOnSuccessListener { uri ->
-                        var contentDTO = ContentDTO()
+
                         // 이미지
-                        contentDTO.imageUrl = uri.toString()
                         // uid
-                        contentDTO.uid = auth?.currentUser?.uid
-                        // userID
-                        contentDTO.userId = auth?.currentUser?.email
+                        // username
+
+                        contentDTO?.profileImageUrl = uri.toString()
+                        contentDTO?.uid = auth?.currentUser?.uid
                         // 시간
-                        contentDTO.timestamp = System.currentTimeMillis()
-                        contentDTO.uid?.let { it1 -> firestore?.collection("profiles")?.document(it1)?.set(contentDTO) }
+                        contentDTO?.timestamp = System.currentTimeMillis()
+                        contentDTO?.uid?.let { it1 -> firestore?.collection("users")?.document(it1)?.set(
+                            contentDTO!!
+                        ) }
+                        getProfileImage()
                     }
 
                 }
             }
-        fragmentView.edit_profile.setOnClickListener {
-            var photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            getResult.launch(photoPickerIntent)
+        if(currentUserUid == uid) {
+            fragmentView.edit_profile.setOnClickListener {
+                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                getResult.launch(photoPickerIntent)
+            }
+        }
+        else {
+            fragmentView.edit_profile.visibility = View.INVISIBLE
         }
 
-
+        getProfileImage()
         // 프로필사진 가져오기
+        return fragmentView
+    }
+
+    fun getProfileImage() {
         var contentDTOp : ArrayList<ContentDTO> = arrayListOf()
-        firestore?.collection("profiles")?.whereEqualTo("uid", currentUserUid)
+        firestore?.collection("users")?.whereEqualTo("uid", uid)
             ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (querySnapshot == null) {
                     return@addSnapshotListener}
@@ -104,16 +126,17 @@ class ProfileFragment(userId: String?) : Fragment() {
                 contentDTOp.clear()
                 for (snapshot in querySnapshot.documents) {
                     contentDTOp.add(snapshot.toObject(ContentDTO::class.java)!!)
-                    fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(contentDTOp[0].imageUrl?.toUri())
-                        .into(fragmentView.account_iv_profile) }
+                    if(contentDTOp[0].profileImageUrl != null)
+                        fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(contentDTOp[0].profileImageUrl?.toUri())
+                            .into(fragmentView.account_iv_profile) }
                 }
             }
-        return fragmentView
     }
+
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         init {
-            firestore?.collection("images")?.whereEqualTo("uid", currentUserUid)
+            firestore?.collection("images")?.whereEqualTo("uid", uid)!!.orderBy("timestamp", Query.Direction.DESCENDING)
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     //Sometimes, This code return null of querySnapshot when it signout
                     if (querySnapshot == null) {

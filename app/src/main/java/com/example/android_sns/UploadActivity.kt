@@ -64,22 +64,19 @@ class UploadActivity : AppCompatActivity() {
         storageRef?.putFile(photoUri!!)?.continueWithTask { task:Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { uri ->
-            var contentDTO = ContentDTO()
-            // 이미지
-            contentDTO.imageUrl = uri.toString()
-            // uid
-            contentDTO.uid = auth?.currentUser?.uid
-            // userID
-            contentDTO.userId = auth?.currentUser?.email
-            // 이미지설명
-            contentDTO.explain =
-                findViewById<EditText>(R.id.uploadImage_edit_explain).text.toString()
-            // 시간
-            contentDTO.timestamp = System.currentTimeMillis()
+            var contentDTO: ContentDTO
 
-            firestore?.collection("images")?.document()?.set(contentDTO)
-            setResult(Activity.RESULT_OK)
-            finish()
+            firestore?.collection("users")?.document(auth?.currentUser?.uid.toString())?.get()
+                ?.addOnSuccessListener {
+                    contentDTO = it.toObject(ContentDTO::class.java)!!
+                    contentDTO.timestamp = System.currentTimeMillis()
+                    contentDTO.imageUrl = uri.toString()
+                    contentDTO.explain =
+                        findViewById<EditText>(R.id.uploadImage_edit_explain).text.toString()
+                    firestore?.collection("images")?.document()?.set(contentDTO)
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
         }
     }
 

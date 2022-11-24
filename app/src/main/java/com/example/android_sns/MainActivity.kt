@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
                     var uid = FirebaseAuth.getInstance().currentUser?.uid
                     bundle.putString("destinationUid",uid)
                     profileFragment.arguments = bundle
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment, profileFragment).commit()
                 }
-                R.id.uploadFragment -> startActivity(goUploadIntent)
+                R.id.uploadActivity -> startActivity(goUploadIntent)
             }
             true
         } )
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     var uid = _uid
                     bundle.putString("destinationUid",uid)
                     profileFragment.arguments = bundle
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment, profileFragment).commit()
     }
 
     // 동적권한 요청

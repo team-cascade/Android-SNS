@@ -53,7 +53,7 @@ class SearchFragment : Fragment() {
             this.mainActivity = mainActivity
         }
         init {
-            firestore?.collection("profiles")?.orderBy("userId")
+            firestore?.collection("profiles")?.orderBy("username")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     contentDTOs.clear()
                     contentUIDList.clear()
@@ -78,26 +78,26 @@ class SearchFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            viewholder.findViewById<TextView>(R.id.search_item_profile_textview).text = contentDTOs!![position].userId
+            viewholder.findViewById<TextView>(R.id.search_item_profile_textview).text = contentDTOs!![position].username
 
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].profileImageUrl)
                 .into(viewholder.findViewById(R.id.search_item_profile_image))
 
 
 //            viewholder.setOnClickListener { activity?.getSupportFragmentManager()?.beginTransaction()
 //                ?.replace(R.id.fragment, ProfileFragment())?.commit() }
-            viewholder.setOnClickListener { mainActivity.goProfileFragment(contentDTOs!![position].userId) }
+            viewholder.setOnClickListener { mainActivity.goProfileFragment(contentDTOs!![position].uid) }
         }
 
         @SuppressLint("SuspiciousIndentation")
         fun searchMethod(searchName: String) {
-            firestore?.collection("profiles")?.orderBy("userId")
+            firestore?.collection("profiles")?.orderBy("username")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     contentDTOs.clear()
                     contentUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
                         val item = snapshot.toObject(ContentDTO::class.java)
-                        if(item?.userId?.contains(searchName) == true)
+                        if(item?.username?.contains(searchName) == true)
                         contentDTOs.add(item!!)
                         contentUIDList.add(snapshot.id)
                     }

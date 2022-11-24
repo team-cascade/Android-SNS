@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,7 +66,7 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            viewholder.findViewById<TextView>(R.id.detailviewitem_profile_textview).text = contentDTOs!![position].userId
+            viewholder.findViewById<TextView>(R.id.detailviewitem_profile_textview).text = contentDTOs!![position].username
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
                 .into(viewholder.findViewById(R.id.detailviewitem_imageview_content))
 
@@ -73,9 +74,9 @@ class DetailViewFragment : Fragment() {
 
             viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
                 "Likes" + contentDTOs!![position].favoriteCount
-
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
-                .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+            if(contentDTOs!![position].profileImageUrl != null)
+                Glide.with(holder.itemView.context).load(contentDTOs!![position].profileImageUrl!!.toUri())
+                    .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
 
             viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
                 favoriteEvent(position)

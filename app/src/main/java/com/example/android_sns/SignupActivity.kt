@@ -65,7 +65,7 @@ class SignupActivity: AppCompatActivity() {
         usersCollectionRef.get().addOnSuccessListener { snapshot ->
             var overlapFlag = false
             for(doc in snapshot) {
-                if(doc.get("name") == name) {
+                if(doc.get("username") == name) {
                     overlapFlag = true
                 }
             }
@@ -81,7 +81,7 @@ class SignupActivity: AppCompatActivity() {
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
                     var uid = it.result.user!!.uid
-                    addUser(uid, userEmail, name, birth.toInt())
+                    addUser(uid, userEmail, name, birth)
                     startActivity(
                         Intent(this, MainActivity::class.java))
                     finish()
@@ -102,13 +102,14 @@ class SignupActivity: AppCompatActivity() {
             }
     }
 
-    private fun addUser(uid: String, userEmail: String, name: String, birth: Int) {
+    private fun addUser(uid: String, userEmail: String, name: String, birth: String) {
         val itemMap = hashMapOf(
-            "email" to userEmail,
-            "name" to name,
-            "birth" to birth
+            "uid" to uid,
+            "useremail" to userEmail,
+            "username" to name,
+            "userBirth" to birth
         )
         usersCollectionRef.document(uid).set(itemMap)
-            .addOnSuccessListener { /*updateList()*/ }.addOnFailureListener {  }
+
     }
 }
