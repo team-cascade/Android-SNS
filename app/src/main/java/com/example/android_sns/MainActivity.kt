@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.android_sns.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -40,11 +41,16 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.fragment, SearchFragment()).commit()
                 R.id.messageFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, MessageFragment()).commit()
-                R.id.profileFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, ProfileFragment("")).commit()
-                R.id.uploadActivity -> {
-                    startActivity(goUploadIntent)
+
+                R.id.profileFragment -> {
+                    var profileFragment = ProfileFragment()
+                    var bundle = Bundle()
+                    var uid = FirebaseAuth.getInstance().currentUser?.uid
+                    bundle.putString("destinationUid",uid)
+                    profileFragment.arguments = bundle
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment()).commit()
                 }
+                R.id.uploadFragment -> startActivity(goUploadIntent)
             }
             true
         } )
@@ -57,8 +63,13 @@ class MainActivity : AppCompatActivity() {
         //bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
 
-    fun goProfileFragment(userId: String?) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment(userId)).commit()
+    fun goProfileFragment(_uid: String?) {
+                    var profileFragment = ProfileFragment()
+                    var bundle = Bundle()
+                    var uid = _uid
+                    bundle.putString("destinationUid",uid)
+                    profileFragment.arguments = bundle
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment, ProfileFragment()).commit()
     }
 
     // 동적권한 요청

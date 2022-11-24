@@ -20,10 +20,10 @@
 
         <Button
             android:id="@+id/account_btn_follow_signout"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/account_iv_profile"
+            android:layout_toRightOf="@id/edit_profile"
             android:text="@string/follow" />
         <LinearLayout
             android:gravity="center"
@@ -80,6 +80,14 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/edit_profile"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_toRightOf="@id/account_iv_profile"
+            android:layout_alignParentBottom="true"
+            android:text="@string/edit" />
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_recyclerview"
