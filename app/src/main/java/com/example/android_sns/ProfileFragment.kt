@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ProfileFragment : Fragment() {
+class ProfileFragment(userId: String?) : Fragment() {
 
     lateinit var fragmentView : View
     var firestore : FirebaseFirestore? = null
