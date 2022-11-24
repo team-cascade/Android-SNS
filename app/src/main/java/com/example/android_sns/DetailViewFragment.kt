@@ -65,7 +65,7 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            viewholder.findViewById<TextView>(R.id.search_item_profile_textview).text = contentDTOs!![position].userId
+            viewholder.findViewById<TextView>(R.id.detailviewitem_profile_textview).text = contentDTOs!![position].userId
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
                 .into(viewholder.findViewById(R.id.detailviewitem_imageview_content))
 
@@ -75,7 +75,7 @@ class DetailViewFragment : Fragment() {
                 "Likes" + contentDTOs!![position].favoriteCount
 
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
-                .into(viewholder.findViewById(R.id.search_item_profile_image))
+                .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
 
             viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
                 favoriteEvent(position)
