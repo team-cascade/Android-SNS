@@ -1,6 +1,7 @@
 package com.example.android_sns
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
 
 
@@ -87,6 +89,15 @@ class DetailViewFragment : Fragment() {
             }else {
                 viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
             }
+            viewholder.detailviewitem_comment_imageview.setOnClickListener {  v ->
+                var intent = Intent(v.context,CommentActivity::class.java)
+                intent.putExtra("contentUid",contentUIDList[position])
+                startActivity(intent)
+
+
+            }
+
+
         }
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUIDList[position])
