@@ -37,4 +37,6 @@
     <string name="follow">follow</string>
     <string name="hint_image_content">hint_image_content</string>
     <string name="hello">hello</string>
+    <string name="signout">SIGNOUT</string>
+    <string name="edit">EDIT</string>
 </resources>
