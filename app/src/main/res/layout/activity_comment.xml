@@ -19,11 +19,11 @@
         android:id="@+id/comment_btn_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/comment_recyclerview"
+        android:layout_below="@+id/my_toolbar"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="-330dp"
+        android:layout_marginTop="83dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="18dp"
         android:text="@string/send" />
 
     <EditText

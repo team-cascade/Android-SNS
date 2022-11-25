@@ -41,7 +41,6 @@ class CommentActivity : AppCompatActivity() {
                 comment.uid = uid
                 comment.username = it.get("username").toString()
                 comment.comment = comment_edit_message.text.toString()
-                Log.w("debug1", comment_edit_message.text.toString())
                 comment.timestamp = System.currentTimeMillis()
                 FirebaseFirestore.getInstance().collection("images").document(contentUid!!).collection("comments").document().set(comment)
                 comment_edit_message.setText("")
@@ -90,7 +89,8 @@ class CommentActivity : AppCompatActivity() {
                 .addOnCompleteListener {  task ->
                     if(task.isSuccessful) {
                         val url = task.result!!["profileImageUrl"]
-                        Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
+                        if(url!=null)
+                            Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
                     }
                 }
         }
