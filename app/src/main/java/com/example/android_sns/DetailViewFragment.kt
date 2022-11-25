@@ -98,10 +98,7 @@ class DetailViewFragment : Fragment() {
                 var intent = Intent(v.context,CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUIDList[position])
                 startActivity(intent)
-
-
             }
-
 
         }
         fun favoriteEvent(position: Int) {
@@ -121,9 +118,6 @@ class DetailViewFragment : Fragment() {
                 }
                 transition.set(tsDoc,contentDTO)
             }
-
-
-
         }
     }
 
