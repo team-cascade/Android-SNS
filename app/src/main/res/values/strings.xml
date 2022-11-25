@@ -25,7 +25,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="upload">업로드</string>
-    <string name="upload_image">이미지 업로드</string>
+    <string name="upload_image">업로드</string>
     <string name="description">내용</string>
     <string name="no_permission">No Permission %1$s.</string>
     <string name="req_permission_reason">Requires %1$s permission.</string>
