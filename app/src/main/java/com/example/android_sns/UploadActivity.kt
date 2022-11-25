@@ -51,6 +51,10 @@ class UploadActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_upload).setOnClickListener {
             contentUpload()
         }
+
+        findViewById<Button>(R.id.btn_back).setOnClickListener {
+            finish()
+        }
     }
 
     fun contentUpload() {
