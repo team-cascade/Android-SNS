@@ -17,7 +17,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="7.5dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_account" />
 
         <TextView
             android:id="@+id/search_item_profile_textview"

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import model.ContentDTO
+import model.UserDTO
 
 class SearchFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
@@ -45,22 +46,22 @@ class SearchFragment : Fragment() {
     }
     @SuppressLint("NotifyDataSetChanged")
     inner class SearchRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
-        var contentUIDList : ArrayList<String> = arrayListOf()
+        var userDTOs : ArrayList<UserDTO> = arrayListOf()
+        var userUIDList : ArrayList<String> = arrayListOf()
         lateinit var mainActivity: MainActivity
 
         fun setActivity(mainActivity: MainActivity) {
             this.mainActivity = mainActivity
         }
         init {
-            firestore?.collection("profiles")?.orderBy("username")
+            firestore?.collection("users")?.orderBy("username")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    contentDTOs.clear()
-                    contentUIDList.clear()
+                    userDTOs.clear()
+                    userUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
-                        val item = snapshot.toObject(ContentDTO::class.java)
-                        contentDTOs.add(item!!)
-                        contentUIDList.add(snapshot.id)
+                        val item = snapshot.toObject(UserDTO::class.java)
+                        userDTOs.add(item!!)
+                        userUIDList.add(item.uid!!)
                     }
                     notifyDataSetChanged()
                 }
@@ -73,33 +74,32 @@ class SearchFragment : Fragment() {
         inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
         override fun getItemCount(): Int {
-            return contentDTOs.size
+            return userDTOs.size
         }
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            viewholder.findViewById<TextView>(R.id.search_item_profile_textview).text = contentDTOs!![position].username
+            viewholder.findViewById<TextView>(R.id.search_item_profile_textview).text = userDTOs!![position].username
 
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].profileImageUrl)
-                .into(viewholder.findViewById(R.id.search_item_profile_image))
+            if(userDTOs[position].profileImageUrl != null)
+                    Glide.with(holder.itemView.context).load(userDTOs[position].profileImageUrl)
+                        .into(viewholder.findViewById(R.id.search_item_profile_image))
 
 
-//            viewholder.setOnClickListener { activity?.getSupportFragmentManager()?.beginTransaction()
-//                ?.replace(R.id.fragment, ProfileFragment())?.commit() }
-            viewholder.setOnClickListener { mainActivity.goProfileFragment(contentDTOs!![position].uid) }
+            viewholder.setOnClickListener { mainActivity.goProfileFragment(userDTOs!![position].uid) }
         }
 
         @SuppressLint("SuspiciousIndentation")
         fun searchMethod(searchName: String) {
-            firestore?.collection("profiles")?.orderBy("username")
+            firestore?.collection("users")?.orderBy("username")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    contentDTOs.clear()
-                    contentUIDList.clear()
+                    userDTOs.clear()
+                    userUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
-                        val item = snapshot.toObject(ContentDTO::class.java)
+                        val item = snapshot.toObject(UserDTO::class.java)
                         if(item?.username?.contains(searchName) == true)
-                        contentDTOs.add(item!!)
-                        contentUIDList.add(snapshot.id)
+                        userDTOs.add(item!!)
+                        userUIDList.add(snapshot.id)
                     }
                     notifyDataSetChanged()
                 }
