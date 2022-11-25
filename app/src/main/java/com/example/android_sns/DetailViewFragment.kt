@@ -41,6 +41,7 @@ class DetailViewFragment : Fragment() {
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUIDList : ArrayList<String> = arrayListOf()
+        var userUIDList : ArrayList<String> = arrayListOf()
         init {
             firestore?.collection("images")?.orderBy("timestamp")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -50,6 +51,7 @@ class DetailViewFragment : Fragment() {
                         val item = snapshot.toObject(ContentDTO::class.java)
                         contentDTOs.add(item!!)
                         contentUIDList.add(snapshot.id)
+                        userUIDList.add(item.uid!!)
                     }
                     notifyDataSetChanged()
                 }
@@ -76,9 +78,12 @@ class DetailViewFragment : Fragment() {
 
             viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
                 "Likes" + contentDTOs!![position].favoriteCount
-            if(contentDTOs!![position].profileImageUrl != null)
-                Glide.with(holder.itemView.context).load(contentDTOs!![position].profileImageUrl!!.toUri())
-                    .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+
+            firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
+                if(it.get("profileImageUrl") != null)
+                    Glide.with(holder.itemView.context).load(it.get("profileImageUrl").toString())
+                        .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+            }
 
             viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
                 favoriteEvent(position)

@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import model.ContentDTO
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import model.UserDTO
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -67,10 +68,10 @@ class ProfileFragment() : Fragment() {
 
         // 콜백함수
 
-        var contentDTO: ContentDTO? = null
+        var userDTO: UserDTO? = null
         firestore?.collection("users")?.document(auth?.currentUser?.uid.toString())?.get()
             ?.addOnSuccessListener {
-                contentDTO = it.toObject(ContentDTO::class.java)
+                userDTO = it.toObject(UserDTO::class.java)
             }
 
         val getResult =
@@ -88,12 +89,10 @@ class ProfileFragment() : Fragment() {
                         // uid
                         // username
 
-                        contentDTO?.profileImageUrl = uri.toString()
-                        contentDTO?.uid = auth?.currentUser?.uid
-                        // 시간
-                        contentDTO?.timestamp = System.currentTimeMillis()
-                        contentDTO?.uid?.let { it1 -> firestore?.collection("users")?.document(it1)?.set(
-                            contentDTO!!
+                        userDTO?.profileImageUrl = uri.toString()
+                        userDTO?.uid = auth?.currentUser?.uid
+                        userDTO?.uid?.let { it1 -> firestore?.collection("users")?.document(it1)?.set(
+                            userDTO!!
                         ) }
                         getProfileImage()
                     }
@@ -117,20 +116,13 @@ class ProfileFragment() : Fragment() {
     }
 
     fun getProfileImage() {
-        var contentDTOp : ArrayList<ContentDTO> = arrayListOf()
-        firestore?.collection("users")?.whereEqualTo("uid", uid)
-            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (querySnapshot == null) {
-                    return@addSnapshotListener}
-                //Get data
-                contentDTOp.clear()
-                for (snapshot in querySnapshot.documents) {
-                    contentDTOp.add(snapshot.toObject(ContentDTO::class.java)!!)
-                    if(contentDTOp[0].profileImageUrl != null)
-                        fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(contentDTOp[0].profileImageUrl?.toUri())
-                            .into(fragmentView.account_iv_profile) }
-                }
-            }
+        var userDTO: UserDTO? = null
+        firestore?.collection("users")?.document(uid!!)?.get()?.addOnSuccessListener {
+            userDTO = it.toObject(UserDTO::class.java)
+            if(userDTO!!.profileImageUrl != null)
+                fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(userDTO!!.profileImageUrl?.toUri())
+                    .into(fragmentView.account_iv_profile) }
+        }
     }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){

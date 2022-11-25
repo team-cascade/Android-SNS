@@ -16,46 +16,46 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/logo"/>
         </androidx.appcompat.widget.Toolbar>
-        <LinearLayout
-            android:id="@+id/toolbar_division"
-            android:background="@color/cardview_light_background"
-            android:layout_below="@id/upload_toolbar"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
     <ImageView
         android:id="@+id/upload_image"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_below="@id/toolbar_division"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_below="@+id/upload_toolbar"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:autofillHints="phone"/>
 
-        <com.google.android.material.textfield.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editText"
             android:layout_below="@id/upload_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/uploadImage_edit_explain"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_gravity="top"
-                android:hint="@string/description"
-                tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_upload"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editText"
+        android:layout_below="@+id/uploadImage_edit_explain"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
         android:text="@string/upload_image"
         android:theme="@style/Widget.AppCompat.Button" />
+
+    <EditText
+        android:id="@+id/uploadImage_edit_explain"
+        android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:layout_below="@+id/editText"
+        android:layout_gravity="top"
+        android:layout_marginTop="60dp"
+        android:hint="@string/description"
+        tools:ignore="SpeakableTextPresentCheck" />
 </RelativeLayout>
 
 
