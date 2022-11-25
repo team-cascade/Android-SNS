@@ -68,7 +68,7 @@ class ProfileFragment() : Fragment() {
                     followEvent(uid!!)
                 }
                 if(currentUserDTO!!.followings.containsKey(uid))
-                    fragmentView.account_btn_follow_signout.text = "UNFOLLOW"
+                    fragmentView.account_btn_follow_signout.text = "팔로우 취소"
             }
         }
 
@@ -145,13 +145,13 @@ class ProfileFragment() : Fragment() {
                 userDTO!!.followers.remove(currentUserUID)
                 currentUserDTO!!.followingCount -= 1
                 currentUserDTO!!.followings.remove(uid)
-                fragmentView.account_btn_follow_signout.text = "FOLLOW"
+                fragmentView.account_btn_follow_signout.text = "팔로우"
             } else {
                 userDTO!!.followerCount = userDTO!!.followerCount + 1
                 userDTO!!.followers[currentUserUID!!] = true
                 currentUserDTO!!.followingCount += 1
                 currentUserDTO!!.followings[uid] = true
-                fragmentView.account_btn_follow_signout.text = "UNFOLLOW"
+                fragmentView.account_btn_follow_signout.text = "팔로우 취소"
             }
             transition.set(tsDoc!!, userDTO!!)
         }!!.addOnSuccessListener {

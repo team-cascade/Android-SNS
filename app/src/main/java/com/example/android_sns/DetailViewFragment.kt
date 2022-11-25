@@ -77,12 +77,15 @@ class DetailViewFragment : Fragment() {
             viewholder.findViewById<TextView>(R.id.detailviewitem_explain_textview).text = contentDTOs!![position].explain
 
             viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
-                "Likes " + contentDTOs!![position].favoriteCount
+                "좋아요 " + contentDTOs!![position].favoriteCount
 
             firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
                 if(it.get("profileImageUrl") != null)
                     Glide.with(holder.itemView.context).load(it.get("profileImageUrl").toString())
                         .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+                else
+                    viewholder.findViewById<ImageView>(R.id.detailviewitem_profile_image)
+                        .setImageResource(R.drawable.ic_account)
             }
 
             viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
