@@ -46,6 +46,12 @@ class CommentActivity : AppCompatActivity() {
                 comment_edit_message.setText("")
             }
         }
+
+        val comment_btn_back = findViewById<Button>(R.id.comment_btn_back)
+        comment_btn_back.setOnClickListener {
+            finish()
+        }
+
     }
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
        var comments : ArrayList<ContentDTO.CommentDTO> = arrayListOf()
