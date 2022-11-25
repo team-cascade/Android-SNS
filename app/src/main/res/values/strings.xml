@@ -29,7 +29,7 @@
     <string name="description">description</string>
     <string name="no_permission">No Permission %1$s.</string>
     <string name="req_permission_reason">Requires %1$s permission.</string>
-    
+
     <string name="post">post</string>
     <string name="count_0">0</string>
     <string name="follower">follower</string>
@@ -39,4 +39,5 @@
     <string name="hello">hello</string>
     <string name="signout">SIGNOUT</string>
     <string name="edit">EDIT</string>
+    <string name="send">send</string>
 </resources>
