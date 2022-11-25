@@ -77,7 +77,7 @@ class DetailViewFragment : Fragment() {
             viewholder.findViewById<TextView>(R.id.detailviewitem_explain_textview).text = contentDTOs!![position].explain
 
             viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
-                "Likes" + contentDTOs!![position].favoriteCount
+                "Likes " + contentDTOs!![position].favoriteCount
 
             firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
                 if(it.get("profileImageUrl") != null)

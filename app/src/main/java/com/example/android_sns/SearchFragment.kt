@@ -20,14 +20,14 @@ import model.UserDTO
 
 class SearchFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
-    var uid : String ?= null
+    var currentUserUID : String ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = LayoutInflater.from(activity).inflate(R.layout.fragment_search,container,false)
 
         firestore = FirebaseFirestore.getInstance()
-        uid = FirebaseAuth.getInstance().currentUser?.uid
+        currentUserUID = FirebaseAuth.getInstance().currentUser?.uid
 
         val searchRecyclerViewAdapter = SearchRecyclerViewAdapter()
 
@@ -61,8 +61,10 @@ class SearchFragment : Fragment() {
                     userUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
                         val item = snapshot.toObject(UserDTO::class.java)
-                        userDTOs.add(item!!)
-                        userUIDList.add(item.uid!!)
+                        if(item!!.uid != currentUserUID) {
+                            userDTOs.add(item!!)
+                            userUIDList.add(item.uid!!)
+                        }
                     }
                     notifyDataSetChanged()
                 }
@@ -100,9 +102,12 @@ class SearchFragment : Fragment() {
                     userUIDList.clear()
                     for(snapshot in querySnapshot!!.documents) {
                         val item = snapshot.toObject(UserDTO::class.java)
-                        if(item?.username?.contains(searchName) == true)
-                        userDTOs.add(item!!)
-                        userUIDList.add(snapshot.id)
+                        if(item?.username!!.lowercase()?.contains(searchName.lowercase()) == true) {
+                            if(item.uid != currentUserUID) {
+                                userDTOs.add(item!!)
+                                userUIDList.add(snapshot.id)
+                            }
+                        }
                     }
                     notifyDataSetChanged()
                 }
