@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -84,7 +85,9 @@ class SearchFragment : Fragment() {
             if(userDTOs[position].profileImageUrl != null)
                     Glide.with(holder.itemView.context).load(userDTOs[position].profileImageUrl)
                         .into(viewholder.findViewById(R.id.search_item_profile_image))
-
+            else
+                viewholder.findViewById<ImageView>(R.id.search_item_profile_image)
+                    .setImageResource(R.drawable.ic_account)
 
             viewholder.setOnClickListener { mainActivity.goProfileFragment(userDTOs!![position].uid) }
         }
