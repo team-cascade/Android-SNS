@@ -17,7 +17,7 @@
         android:title="@string/upload"/>
     <item
         android:id="@+id/alarmFragment"
-        android:icon="@drawable/ic_chat_black"
+        android:icon="@drawable/ic_alarm"
         android:enabled="true"
         android:title="@string/Alarm"/>
     <item
