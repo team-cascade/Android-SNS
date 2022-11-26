@@ -40,4 +40,7 @@
     <string name="signout">SIGNOUT</string>
     <string name="edit">EDIT</string>
     <string name="send">send</string>
+    <string name="alarm_favorite">favorite alarm</string>
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
+    <string name="msg_token_fmt">msg_token_fmt</string>
 </resources>

@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
+import model.util.MyFirebaseMessagingService
 
 
 class DetailViewFragment : Fragment() {
@@ -121,10 +122,8 @@ class DetailViewFragment : Fragment() {
                 }
                 transition.set(tsDoc,contentDTO)
             }
-
-
-
         }
-    }
 
+    }
 }
+
