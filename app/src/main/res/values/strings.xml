@@ -38,6 +38,11 @@
     <string name="unfollow">팔로우 취소</string>
     <string name="hint_image_content">hint_image_content</string>
     <string name="hello">hello</string>
+
+    <string name="Alarm">알림</string>
+    <string name="alarm_favorite">님이 회원님의 게시글에 좋아요를 눌렀습니다.</string>
+    <string name="alarm_follow">님이 회원님을 팔로우했습니다.</string>
+    <string name="alarm_comment">댓글을 남겼습니다.</string>
     <string name="signout">로그아웃</string>
     <string name="edit">프로필 편집</string>
     <string name="send">게시</string>

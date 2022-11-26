@@ -16,10 +16,10 @@
         android:enabled="true"
         android:title="@string/upload"/>
     <item
-        android:id="@+id/messageFragment"
+        android:id="@+id/alarmFragment"
         android:icon="@drawable/ic_chat_black"
         android:enabled="true"
-        android:title="@string/message"/>
+        android:title="@string/Alarm"/>
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_account"

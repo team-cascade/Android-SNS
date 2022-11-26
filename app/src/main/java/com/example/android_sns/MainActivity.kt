@@ -50,8 +50,8 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.fragment, DetailViewFragment()).commit()
                 R.id.searchFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, SearchFragment()).commit()
-                R.id.messageFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, MessageFragment()).commit()
+                R.id.alarmFragment -> supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, AlarmFragment()).commit()
 
                 R.id.profileFragment -> {
                     var profileFragment = ProfileFragment()
