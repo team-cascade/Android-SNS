@@ -39,6 +39,9 @@
     <string name="hint_image_content">hint_image_content</string>
     <string name="hello">hello</string>
 
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
+    <string name="msg_token_fmt">msg_token_fmt</string>
+
     <string name="Alarm">알림</string>
     <string name="alarm_favorite">님이 회원님의 게시글에 좋아요를 눌렀습니다.</string>
     <string name="alarm_follow">님이 회원님을 팔로우했습니다.</string>

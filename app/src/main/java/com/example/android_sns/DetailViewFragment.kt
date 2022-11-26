@@ -19,7 +19,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
+import model.util.MyFirebaseMessagingService
 import model.UserDTO
+
 
 
 class DetailViewFragment : Fragment() {
@@ -138,7 +140,6 @@ class DetailViewFragment : Fragment() {
                 }
                 transition.set(tsDoc,contentDTO)
             }
-
         }
         // 좋아요 알람 이벤트 (전달받은 UID)
         private fun favoriteAlarm(destinationUid: String) {
@@ -158,8 +159,8 @@ class DetailViewFragment : Fragment() {
                     FirebaseFirestore.getInstance().collection("users").document(destinationUid)
                         .collection("alarms").document().set(alarmDTO)
                 }
-
         }
+
     }
 }
 

@@ -14,10 +14,31 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
     private var bottomNavigationView: BottomNavigationView? = null
+
+    // 푸시알림 토큰 설정 함수
+    fun registerPushToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            task ->
+                if(task.isSuccessful) {
+                    var token = task.result?:""
+                    var uid = FirebaseAuth.getInstance().currentUser?.uid
+                    val map = mutableMapOf<String,Any>()
+                    map["pushToken"] = token!!
+
+                    FirebaseFirestore.getInstance().collection("pushtokens").document(uid!!).set(map)
+
+
+                }
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +47,19 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // 동적권한 요청
         requestSinglePermission(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         bottomNavigationView = binding.bottomNavigation
 
+
+
         supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
             .commit()
+
+        // 토큰 생성 함수
+        registerPushToken()
 
         val getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -72,6 +99,8 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
         //bottomNavigationView!!.selectedItemId = R.id.homeFragment
+
+
     }
 
     fun goProfileFragment(_uid: String?) {
@@ -82,6 +111,7 @@ class MainActivity : AppCompatActivity() {
                     profileFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.fragment, profileFragment).commit()
     }
+
 
     // 동적권한 요청
     private fun requestSinglePermission(permission: String) { // 한번에 하나의 권한만 요청하는 예제
