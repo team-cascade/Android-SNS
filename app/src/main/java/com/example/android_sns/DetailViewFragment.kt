@@ -14,15 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
+import model.UserDTO
 
 
 class DetailViewFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
     var uid : String ?= null
     var manager : LinearLayoutManager ?= null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail_view,container,false)
@@ -97,12 +100,9 @@ class DetailViewFragment : Fragment() {
             viewholder.detailviewitem_comment_imageview.setOnClickListener {  v ->
                 var intent = Intent(v.context,CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUIDList[position])
+                intent.putExtra("destinationUid", contentDTOs[position].uid.toString())
                 startActivity(intent)
-
-
             }
-
-
         }
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUIDList[position])
@@ -118,13 +118,30 @@ class DetailViewFragment : Fragment() {
                 } else {
                     contentDTO.favoriteCount = contentDTO.favoriteCount + 1
                     contentDTO.favorites[uid!!] = true
+
+                    //알림 보내기
+                    favoriteAlarm(contentDTOs[position].uid.toString())
                 }
                 transition.set(tsDoc,contentDTO)
             }
-
-
-
+        }
+        // 좋아요 알람 이벤트 (전달받은 UID)
+        private fun favoriteAlarm(destinationUid: String) {
+            // 알람 데이터 클래스 세팅
+            var alarmDTO = UserDTO.AlarmDTO()
+            var uid = FirebaseAuth.getInstance().currentUser?.uid
+            firestore?.collection("users")?.document(uid.toString())?.get()
+                ?.addOnSuccessListener {
+                    alarmDTO.uid = uid
+                    alarmDTO.destinationUid = destinationUid
+                    alarmDTO.username = it.get("username").toString()
+                    alarmDTO.kind = 0 // 알람종류: 좋아요
+                    alarmDTO.timestamp = System.currentTimeMillis()
+                    // FirebaseFirestore 알람 세팅
+                    FirebaseFirestore.getInstance().collection("users").document(destinationUid)
+                        .collection("alarms").document().set(alarmDTO)
+                }
         }
     }
-
 }
+
