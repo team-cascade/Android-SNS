@@ -18,8 +18,8 @@
             android:layout_height="70dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="27dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="5dp"
             android:src="@drawable/ic_account" />
 
         <Button
@@ -27,7 +27,7 @@
             android:layout_width="130dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginBottom="0dp"
             android:layout_toRightOf="@id/edit_profile"
             android:text="@string/follow" />
@@ -36,7 +36,7 @@
             android:layout_width="264dp"
             android:layout_height="52dp"
             android:layout_above="@id/account_btn_follow_signout"
-            android:layout_marginLeft="34dp"
+            android:layout_marginLeft="36dp"
             android:layout_marginBottom="0dp"
             android:layout_toRightOf="@id/account_iv_profile"
             android:gravity="center">
@@ -104,7 +104,7 @@
             android:layout_width="130dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="34dp"
+            android:layout_marginLeft="36dp"
             android:layout_marginBottom="-1dp"
             android:layout_toRightOf="@id/account_iv_profile"
             android:text="@string/edit" />
@@ -115,8 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/account_iv_profile"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="2dp"
             android:textAlignment="center" />
 
     </RelativeLayout>
