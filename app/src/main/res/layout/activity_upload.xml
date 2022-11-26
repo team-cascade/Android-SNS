@@ -56,6 +56,16 @@
         android:layout_marginTop="60dp"
         android:hint="@string/description"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uploadImage_edit_explain"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/back" />
 </RelativeLayout>
 
 
