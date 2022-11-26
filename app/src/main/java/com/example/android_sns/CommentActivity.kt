@@ -62,6 +62,8 @@ class CommentActivity : AppCompatActivity() {
         var alarmDTO = UserDTO.AlarmDTO()
         var uid = FirebaseAuth.getInstance().currentUser?.uid
         var firestore = FirebaseFirestore.getInstance()
+        if(uid == destinationUid)
+            return
         firestore?.collection("users")?.document(uid.toString())?.get()
             ?.addOnSuccessListener {
                 alarmDTO.uid = uid

@@ -134,31 +134,46 @@ class ProfileFragment() : Fragment() {
         var userDTO: UserDTO ?= null
 
         firestore?.runTransaction { transition ->
-
             userDTO = transition.get(tsDoc!!).toObject(UserDTO::class.java)
-            firestore?.collection("users")?.document(uid)?.get()
-                ?.addOnSuccessListener {
-                    userDTO = it.toObject(UserDTO::class.java)!!
-                }
             if (userDTO!!.followers.containsKey(currentUserUID)) {
                 userDTO!!.followerCount = userDTO!!.followerCount - 1
                 userDTO!!.followers.remove(currentUserUID)
                 currentUserDTO!!.followingCount -= 1
                 currentUserDTO!!.followings.remove(uid)
                 fragmentView.account_btn_follow_signout.text = "팔로우"
+
+                // 팔로우 알람
             } else {
                 userDTO!!.followerCount = userDTO!!.followerCount + 1
                 userDTO!!.followers[currentUserUID!!] = true
                 currentUserDTO!!.followingCount += 1
                 currentUserDTO!!.followings[uid] = true
                 fragmentView.account_btn_follow_signout.text = "팔로우 취소"
+                followAlarm(uid)
             }
             transition.set(tsDoc!!, userDTO!!)
         }!!.addOnSuccessListener {
             fragmentView.account_tv_follower_count.text = userDTO?.followerCount.toString()
-            fragmentView.account_tv_following_count.text = userDTO?.followingCount!!.toString()
             firestore!!.collection("users").document(currentUserUID!!).set(currentUserDTO!!)
         }
+    }
+
+    fun followAlarm(destinationUid: String) {
+        // 알람 데이터 클래스 세팅
+        var alarmDTO = UserDTO.AlarmDTO()
+        var uid = FirebaseAuth.getInstance().currentUser?.uid
+        var firestore = FirebaseFirestore.getInstance()
+        firestore?.collection("users")?.document(uid.toString())?.get()
+            ?.addOnSuccessListener {
+                alarmDTO.uid = uid
+                alarmDTO.destinationUid = destinationUid
+                alarmDTO.username = it.get("username").toString()
+                alarmDTO.kind = 2 // 알람종류: 팔로우
+                alarmDTO.timestamp = System.currentTimeMillis()
+                // FirebaseFirestore 알람 세팅
+                FirebaseFirestore.getInstance().collection("users").document(destinationUid)
+                    .collection("alarms").document().set(alarmDTO)
+            }
     }
 
     fun getProfileImage() {

@@ -144,6 +144,8 @@ class DetailViewFragment : Fragment() {
             // 알람 데이터 클래스 세팅
             var alarmDTO = UserDTO.AlarmDTO()
             var uid = FirebaseAuth.getInstance().currentUser?.uid
+            if(uid == destinationUid)
+                return
             firestore?.collection("users")?.document(uid.toString())?.get()
                 ?.addOnSuccessListener {
                     alarmDTO.uid = uid
