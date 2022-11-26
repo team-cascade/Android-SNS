@@ -25,6 +25,7 @@ class DetailViewFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
     var uid : String ?= null
     var manager : LinearLayoutManager ?= null
+    var userDTO : UserDTO ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,19 +47,28 @@ class DetailViewFragment : Fragment() {
         var contentUIDList : ArrayList<String> = arrayListOf()
         var userUIDList : ArrayList<String> = arrayListOf()
         init {
-            firestore?.collection("images")?.orderBy("timestamp")
-                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    contentDTOs.clear()
-                    contentUIDList.clear()
-                    for(snapshot in querySnapshot!!.documents) {
-                        val item = snapshot.toObject(ContentDTO::class.java)
-                        contentDTOs.add(item!!)
-                        contentUIDList.add(snapshot.id)
-                        userUIDList.add(item.uid!!)
+            firestore?.collection("users")?.document(uid!!)!!.get().addOnSuccessListener {
+
+                userDTO = it.toObject(UserDTO::class.java)
+
+                firestore?.collection("images")?.orderBy("timestamp")
+                    ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                        contentDTOs.clear()
+                        contentUIDList.clear()
+                        for (snapshot in querySnapshot!!.documents) {
+                            val item = snapshot.toObject(ContentDTO::class.java)
+                            // 팔로우시에만 뉴스피드에 뜸
+                            if(userDTO!!.followings.containsKey(item!!.uid) || item.uid == uid) {
+                                contentDTOs.add(item!!)
+                                contentUIDList.add(snapshot.id)
+                                userUIDList.add(item.uid!!)
+                            }
+                        }
+                        notifyDataSetChanged()
                     }
-                    notifyDataSetChanged()
-                }
+            }
         }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
             return CustomViewHolder(view)
@@ -80,12 +90,15 @@ class DetailViewFragment : Fragment() {
             viewholder.findViewById<TextView>(R.id.detailviewitem_explain_textview).text = contentDTOs!![position].explain
 
             viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
-                "Likes" + contentDTOs!![position].favoriteCount
+                "좋아요 " + contentDTOs!![position].favoriteCount
 
             firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
                 if(it.get("profileImageUrl") != null)
                     Glide.with(holder.itemView.context).load(it.get("profileImageUrl").toString())
                         .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+                else
+                    viewholder.findViewById<ImageView>(R.id.detailviewitem_profile_image)
+                        .setImageResource(R.drawable.ic_account)
             }
 
             viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
@@ -124,6 +137,7 @@ class DetailViewFragment : Fragment() {
                 }
                 transition.set(tsDoc,contentDTO)
             }
+
         }
         // 좋아요 알람 이벤트 (전달받은 UID)
         private fun favoriteAlarm(destinationUid: String) {
@@ -141,6 +155,7 @@ class DetailViewFragment : Fragment() {
                     FirebaseFirestore.getInstance().collection("users").document(destinationUid)
                         .collection("alarms").document().set(alarmDTO)
                 }
+
         }
     }
 }

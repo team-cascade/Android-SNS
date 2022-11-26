@@ -50,6 +50,12 @@ class CommentActivity : AppCompatActivity() {
                 comment_edit_message.setText("")
             }
         }
+
+        val comment_btn_back = findViewById<Button>(R.id.comment_btn_back)
+        comment_btn_back.setOnClickListener {
+            finish()
+        }
+
     }
     fun commentAlarm(destinationUid: String, message: String) {
         // 알람 데이터 클래스 세팅

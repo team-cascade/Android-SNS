@@ -1,10 +1,12 @@
 package com.example.android_sns
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.android_sns.databinding.ActivityMainBinding
@@ -32,6 +34,15 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
             .commit()
 
+        val getResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment, DetailViewFragment()).commit()
+                    bottomNavigationView!!.selectedItemId = R.id.detailViewFragment
+                }
+            }
+
         val goUploadIntent = Intent(this, UploadActivity::class.java)
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
@@ -50,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     profileFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.fragment, profileFragment).commit()
                 }
-                R.id.uploadActivity -> startActivity(goUploadIntent)
+                R.id.uploadActivity -> getResult.launch(goUploadIntent)
             }
             true
         } )

@@ -6,8 +6,10 @@ data class UserDTO(
     var useremail: String? = null,
     var username: String? = null,
     var userBirth: String? = null,
-    var favoriteCount: Int = 0,
-    var favorites: MutableMap<String, Boolean> = HashMap()
+    var followerCount: Int = 0,
+    var followingCount: Int = 0,
+    var followers: MutableMap<String, Boolean> = HashMap(),
+    var followings: MutableMap<String, Boolean> = HashMap()
 ){
     data class AlarmDTO(
         var destinationUid: String? = null,

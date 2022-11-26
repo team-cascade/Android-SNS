@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import model.UserDTO
 import java.util.*
 
 class SignupActivity: AppCompatActivity() {
@@ -75,7 +76,14 @@ class SignupActivity: AppCompatActivity() {
                 binding.signupErrorText.text = "이미 있는 사용자 이름입니다."
         }
     }
-
+    private fun addUser(uid: String, userEmail: String, name: String, birth: String) {
+        var userDTO = UserDTO()
+        userDTO.uid = uid
+        userDTO.useremail = userEmail
+        userDTO.username = name
+        userDTO.userBirth = birth
+        usersCollectionRef.document(uid).set(userDTO)
+    }
     private fun firebaseSignUp(userEmail: String, password: String, name: String, birth: String) {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) {
@@ -102,14 +110,5 @@ class SignupActivity: AppCompatActivity() {
             }
     }
 
-    private fun addUser(uid: String, userEmail: String, name: String, birth: String) {
-        val itemMap = hashMapOf(
-            "uid" to uid,
-            "useremail" to userEmail,
-            "username" to name,
-            "userBirth" to birth
-        )
-        usersCollectionRef.document(uid).set(itemMap)
 
-    }
 }
