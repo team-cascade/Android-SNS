@@ -31,7 +31,10 @@ class CommentActivity : AppCompatActivity() {
         var firestore = FirebaseFirestore.getInstance()
 
         comment_recyclerview.adapter = CommentRecyclerviewAdapter()
-        comment_recyclerview.layoutManager = LinearLayoutManager(this)
+        comment_recyclerview.layoutManager = LinearLayoutManager(this).apply {
+            reverseLayout = true
+            stackFromEnd = true
+        }
 
         val comment_btn_send = findViewById<Button>(R.id.comment_btn_send)
         comment_btn_send.setOnClickListener {

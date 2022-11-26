@@ -86,6 +86,7 @@ class ProfileFragment() : Fragment() {
                 userDTO = it.toObject(UserDTO::class.java)!!
                 fragmentView.account_tv_follower_count.text = userDTO?.followerCount.toString()
                 fragmentView.account_tv_following_count.text = userDTO?.followingCount!!.toString()
+                fragmentView.account_tv_username.text = userDTO?.username
             }
 
         val getResult =
@@ -123,7 +124,6 @@ class ProfileFragment() : Fragment() {
         else {
             fragmentView.edit_profile.visibility = View.INVISIBLE
         }
-
         getProfileImage()
         // 프로필사진 가져오기
         return fragmentView
