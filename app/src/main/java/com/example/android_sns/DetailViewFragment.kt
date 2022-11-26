@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -95,7 +96,7 @@ class DetailViewFragment : Fragment() {
             firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
                 if(it.get("profileImageUrl") != null)
                     Glide.with(holder.itemView.context).load(it.get("profileImageUrl").toString())
-                        .into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+                        .apply(RequestOptions().circleCrop()).into(viewholder.findViewById(R.id.detailviewitem_profile_image))
                 else
                     viewholder.findViewById<ImageView>(R.id.detailviewitem_profile_image)
                         .setImageResource(R.drawable.ic_account)

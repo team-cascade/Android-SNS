@@ -182,7 +182,7 @@ class ProfileFragment() : Fragment() {
             userDTO = it.toObject(UserDTO::class.java)!!
             if(userDTO!!.profileImageUrl != null)
                 fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(userDTO!!.profileImageUrl?.toUri())
-                    .into(fragmentView.account_iv_profile) }
+                    .apply(RequestOptions().circleCrop()).into(fragmentView.account_iv_profile) }
         }
     }
 

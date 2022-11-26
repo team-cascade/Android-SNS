@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import model.ContentDTO
@@ -86,7 +87,7 @@ class SearchFragment : Fragment() {
 
             if(userDTOs[position].profileImageUrl != null)
                     Glide.with(holder.itemView.context).load(userDTOs[position].profileImageUrl)
-                        .into(viewholder.findViewById(R.id.search_item_profile_image))
+                        .apply(RequestOptions().circleCrop()).into(viewholder.findViewById(R.id.search_item_profile_image))
             else
                 viewholder.findViewById<ImageView>(R.id.search_item_profile_image)
                     .setImageResource(R.drawable.ic_account)
