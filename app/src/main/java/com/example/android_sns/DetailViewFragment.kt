@@ -8,18 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
-import model.util.MyFirebaseMessagingService
 import model.UserDTO
 
 
@@ -140,6 +137,9 @@ class DetailViewFragment : Fragment() {
                 }
                 transition.set(tsDoc,contentDTO)
             }
+
+
+
         }
         // 좋아요 알람 이벤트 (전달받은 UID)
         private fun favoriteAlarm(destinationUid: String) {
@@ -162,5 +162,5 @@ class DetailViewFragment : Fragment() {
         }
 
     }
-}
 
+}
