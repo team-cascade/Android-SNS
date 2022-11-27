@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="500dp"
+        android:layout_width="400dp"
         android:layout_height="300dp"
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,27 +26,40 @@
 
     <EditText
         android:id="@+id/textID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="50"
-        android:hint="아이디"
-        android:inputType="textPersonName"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="44dp"
         android:minHeight="48dp"
+        android:background="#E1E1E1"
+        android:backgroundTint="#E1E1E1"
+        android:ems="10"
+        android:hint="@string/E_mail"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textColorHint="#BABABA"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/textPWD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:ems="50"
-        android:hint="비밀번호"
+        android:background="#E1E1E1"
+        android:backgroundTint="#E1E1E1"
+        android:hint="@string/pw_hint"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textColorHint="#BABABA"
+        android:textStyle="bold"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textID"
         app:layout_constraintTop_toBottomOf="@+id/textID"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -79,6 +92,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPWD" />
+
+    <TextView
+        android:id="@+id/idTitle"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:background="#3346B5"
+        android:gravity="center"
+        android:text="@string/ID_Email"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintEnd_toStartOf="@+id/textID"
+        app:layout_constraintTop_toTopOf="@+id/textID" />
+
+    <TextView
+        android:id="@+id/pwTitle"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:background="#3346B5"
+        android:gravity="center"
+        android:text="@string/pw"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintEnd_toStartOf="@+id/textPWD"
+        app:layout_constraintTop_toTopOf="@+id/textPWD" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
