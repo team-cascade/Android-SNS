@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.item_detail.view.*
 import model.ContentDTO
 import model.UserDTO
@@ -35,10 +36,7 @@ class DetailViewFragment : Fragment() {
         uid = FirebaseAuth.getInstance().currentUser?.uid
 
         view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).adapter  = DetailViewRecyclerViewAdapter()
-        manager = LinearLayoutManager(activity)
-        manager!!.reverseLayout = true
-        manager!!.stackFromEnd = true
-        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).layoutManager = manager
+        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).layoutManager = LinearLayoutManager(activity)
         return view
     }
     @SuppressLint("NotifyDataSetChanged")
@@ -46,12 +44,14 @@ class DetailViewFragment : Fragment() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUIDList : ArrayList<String> = arrayListOf()
         var userUIDList : ArrayList<String> = arrayListOf()
+
+        // 뉴스 피드를 초기화, 게시글의 시간순으로 정렬
         init {
             firestore?.collection("users")?.document(uid!!)!!.get().addOnSuccessListener {
 
                 userDTO = it.toObject(UserDTO::class.java)
 
-                firestore?.collection("images")?.orderBy("timestamp")
+                firestore?.collection("images")?.orderBy("timestamp", Query.Direction.DESCENDING)
                     ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                         contentDTOs.clear()
                         contentUIDList.clear()
@@ -80,6 +80,9 @@ class DetailViewFragment : Fragment() {
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
+
+        // 게시글 렌더링 메소드
+        // 프로필 이미지, 유저 이름, 게시글 사진, 게시글 내용, 좋아요 하트(토글), 댓글, 좋아요 수
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
@@ -110,6 +113,8 @@ class DetailViewFragment : Fragment() {
             }else {
                 viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
             }
+
+            // 게시글의 댓글을 볼 수 있는 activity
             viewholder.detailviewitem_comment_imageview.setOnClickListener {  v ->
                 var intent = Intent(v.context,CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUIDList[position])
@@ -117,6 +122,8 @@ class DetailViewFragment : Fragment() {
                 startActivity(intent)
             }
         }
+
+        // 게시글 좋아요
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUIDList[position])
             firestore?.runTransaction {
@@ -141,12 +148,12 @@ class DetailViewFragment : Fragment() {
 
 
         }
-        // 좋아요 알람 이벤트 (전달받은 UID)
+        // 좋아요 알림을 파이어스토어에 저장
         private fun favoriteAlarm(destinationUid: String) {
             // 알람 데이터 클래스 세팅
             var alarmDTO = UserDTO.AlarmDTO()
             var uid = FirebaseAuth.getInstance().currentUser?.uid
-            if(uid == destinationUid)
+            if(uid == destinationUid) // 자신의 알림은 저장 X
                 return
             firestore?.collection("users")?.document(uid.toString())?.get()
                 ?.addOnSuccessListener {

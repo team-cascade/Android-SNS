@@ -18,6 +18,7 @@ import com.google.firebase.storage.UploadTask
 import model.ContentDTO
 import java.util.*
 
+// 게시물 업로드 액티비티
 class UploadActivity : AppCompatActivity() {
     var storage: FirebaseStorage? = null
     var photoUri: Uri? = null
@@ -27,13 +28,12 @@ class UploadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
-        //Initiate storage
 
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        //콜백 함수
+        //앨범에서 사진 선택 시 콜백 함수
         val getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -57,19 +57,18 @@ class UploadActivity : AppCompatActivity() {
         }
     }
 
+    // 사진 업로드
     fun contentUpload() {
         // 파일명 생성
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + "_.png"
         var storageRef = storage?.reference?.child("images")?.child(imageFileName)
 
-        //파일 업로드
-        // Promise 방식
+        //파이어베이스 스토리지 사진 업로드
         storageRef?.putFile(photoUri!!)?.continueWithTask { task:Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
-        }?.addOnSuccessListener { uri ->
+        }?.addOnSuccessListener { uri -> // 성공하면 파이어스토어에 게시글 정보 업로드 후 액티비티 종료
             var contentDTO: ContentDTO
-
             firestore?.collection("users")?.document(auth?.currentUser?.uid.toString())?.get()
                 ?.addOnSuccessListener {
                     contentDTO = it.toObject(ContentDTO::class.java)!!

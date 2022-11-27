@@ -4,8 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.DatePicker
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android_sns.databinding.ActivitySignupBinding
 import com.google.firebase.auth.ktx.auth
@@ -15,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import model.UserDTO
 import java.util.*
 
+// 회원가입 액티비티
 class SignupActivity: AppCompatActivity() {
     private val db: FirebaseFirestore = Firebase.firestore
     private val usersCollectionRef = db.collection("users")
@@ -56,6 +55,7 @@ class SignupActivity: AppCompatActivity() {
         }
     }
 
+    //회원가입 메소드
     private fun doSignUp(userEmail: String, password: String, name: String, birth: String) {
         if(userEmail.isNullOrEmpty() || password.isNullOrEmpty() || name.isNullOrEmpty() || birth.isNullOrEmpty()) {
             binding.signupErrorText.text = "입력하지 않은 항목이 있습니다."
@@ -76,6 +76,8 @@ class SignupActivity: AppCompatActivity() {
                 binding.signupErrorText.text = "이미 있는 사용자 이름입니다."
         }
     }
+
+    // 파이어스토어 user 등록
     private fun addUser(uid: String, userEmail: String, name: String, birth: String) {
         var userDTO = UserDTO()
         userDTO.uid = uid
@@ -84,6 +86,8 @@ class SignupActivity: AppCompatActivity() {
         userDTO.userBirth = birth
         usersCollectionRef.document(uid).set(userDTO)
     }
+
+    // 파이어베이스 Auth 회원가입
     private fun firebaseSignUp(userEmail: String, password: String, name: String, birth: String) {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) {
@@ -95,7 +99,8 @@ class SignupActivity: AppCompatActivity() {
                     finish()
                 } else {
                     Log.w("SignUpActivity", "createUserWithEmail", it.exception )
-                    //Toast.makeText(this, "Sign Up failed.", Toast.LENGTH_SHORT).show()
+
+                    // 오류처리
                     var errorMessage = it.exception?.localizedMessage
                     when (errorMessage) {
                         "The email address is badly formatted." ->

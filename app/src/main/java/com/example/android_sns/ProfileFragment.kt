@@ -5,13 +5,11 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.net.toUri
@@ -45,13 +43,15 @@ class ProfileFragment() : Fragment() {
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_profile, container, false)
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        uid = arguments?.getString("destinationUid")
+        uid = arguments?.getString("destinationUid") // 인자로 넘어온 uid, auth의 currentUid와 같을 경우 자신의 프로필
         currentUserUID = auth!!.currentUser?.uid
 
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity,3)
 
-        //   버튼 설정
+        // 버튼 설정
+        // 인자 UID와 auth의 currentUID가 같을 경우 자신의 프로필 : 프로필 편집, 로그아웃 버튼
+        // 다를 경우 검색창에서 넘어온 유저의 프로필 : 팔로우 버튼
         firestore!!.collection("users")?.document(currentUserUID!!)!!.get().addOnSuccessListener {
             currentUserDTO = it.toObject(UserDTO::class.java)
         }.addOnSuccessListener {
@@ -79,7 +79,7 @@ class ProfileFragment() : Fragment() {
         var storage = FirebaseStorage.getInstance()
         var storageRef = storage?.reference?.child("images")?.child(imageFileName)
 
-        // 콜백함수
+        // 파이어스토어에서 팔로워 수, 팔로잉 수, 유저 이름 데이터를 받아와서 갱신
         var userDTO: UserDTO? = null
         firestore?.collection("users")?.document(uid!!)?.get()
             ?.addOnSuccessListener {
@@ -89,6 +89,7 @@ class ProfileFragment() : Fragment() {
                 fragmentView.account_tv_username.text = userDTO?.username
             }
 
+        // 프로필 이미지 편집 콜백 함수
         val getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -114,6 +115,8 @@ class ProfileFragment() : Fragment() {
 
                 }
             }
+
+        // 프로필 이미지를 편집
         if(currentUserUID == uid) {
             fragmentView.edit_profile.setOnClickListener {
                 var photoPickerIntent = Intent(Intent.ACTION_PICK)
@@ -128,7 +131,7 @@ class ProfileFragment() : Fragment() {
         // 프로필사진 가져오기
         return fragmentView
     }
-
+    // 팔로우 시 해당 유저의 팔로워 데이터와 현재 유저의 팔로우 데이터 갱신
     fun followEvent(uid: String) {
         var tsDoc = firestore?.collection("users")?.document(uid)
         var userDTO: UserDTO ?= null
@@ -158,6 +161,7 @@ class ProfileFragment() : Fragment() {
         }
     }
 
+    //팔로우시 알림 생성
     fun followAlarm(destinationUid: String) {
         // 알람 데이터 클래스 세팅
         var alarmDTO = UserDTO.AlarmDTO()
@@ -175,7 +179,7 @@ class ProfileFragment() : Fragment() {
                     .collection("alarms").document().set(alarmDTO)
             }
     }
-
+    // 프로필 이미지를 가져옴
     fun getProfileImage() {
         var userDTO: UserDTO? = null
         firestore?.collection("users")?.document(uid!!)?.get()?.addOnSuccessListener {
@@ -185,9 +189,11 @@ class ProfileFragment() : Fragment() {
                     .apply(RequestOptions().circleCrop()).into(fragmentView.account_iv_profile) }
         }
     }
-
+    // 유저의 게시글을 보여주는 리사이클러뷰
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+
+        // 유저와 uid가 일치하는 게시글을 찾아서 초기화
         init {
             firestore?.collection("images")?.whereEqualTo("uid", uid)!!.orderBy("timestamp", Query.Direction.DESCENDING)
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -202,6 +208,8 @@ class ProfileFragment() : Fragment() {
                     notifyDataSetChanged()
                 }
         }
+
+        // 유저의 게시글을 가로 3칸으로 나눠서 보여줌
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RecyclerView.ViewHolder {
             var width = resources.displayMetrics.widthPixels / 3
             var imageview = ImageView(p0.context)

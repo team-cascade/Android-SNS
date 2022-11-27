@@ -16,9 +16,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import model.ContentDTO
 import model.UserDTO
 
+// 유저 검색 액티비티
 class SearchFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
     var currentUserUID : String ?= null
@@ -46,6 +46,8 @@ class SearchFragment : Fragment() {
 
         return view
     }
+
+    // 검색한 유저를 나열하는 리사이클러뷰
     @SuppressLint("NotifyDataSetChanged")
     inner class SearchRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var userDTOs : ArrayList<UserDTO> = arrayListOf()
@@ -55,6 +57,8 @@ class SearchFragment : Fragment() {
         fun setActivity(mainActivity: MainActivity) {
             this.mainActivity = mainActivity
         }
+
+        // 초기화 : DB에 있는 모든 유저를 이름순으로 정렬해서 리사이클러뷰에 추가
         init {
             firestore?.collection("users")?.orderBy("username")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -80,6 +84,8 @@ class SearchFragment : Fragment() {
         override fun getItemCount(): Int {
             return userDTOs.size
         }
+
+        // Bind시 프로필 이미지와 이름을 보여줌
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
@@ -95,6 +101,7 @@ class SearchFragment : Fragment() {
             viewholder.setOnClickListener { mainActivity.goProfileFragment(userDTOs!![position].uid) }
         }
 
+        // 검색한 이름을 포함하는 유저로 데이터 갱신
         @SuppressLint("SuspiciousIndentation")
         fun searchMethod(searchName: String) {
             firestore?.collection("users")?.orderBy("username")

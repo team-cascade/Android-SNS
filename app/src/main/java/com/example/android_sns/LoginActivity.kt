@@ -3,7 +3,6 @@ package com.example.android_sns
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android_sns.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+        // 파이어베이스 로그인
         private fun doLogin(userEmail: String, password: String) {
                 if(userEmail.isNullOrEmpty() || password.isNullOrEmpty()) {
                         binding.loginErrorText.text = "이메일과 비밀번호를 입력해주세요."

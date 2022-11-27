@@ -4,8 +4,8 @@
     <!--  Sign Up String  -->
     <string name="name">이름</string>
     <string name="ID">아이디</string>
-    <string name="InputName">사용자 이름</string>
-    <string name="E_mail">이메일 주소</string>
+    <string name="InputName">hsdaily</string>
+    <string name="E_mail">hsdaily@naver.com</string>
     <string name="pw">비밀번호</string>
     <string name="pw_hint">*******</string>
     <string name="birth">생년월일</string>

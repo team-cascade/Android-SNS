@@ -30,6 +30,7 @@ class AlarmFragment : Fragment() {
     inner class AlarmRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         private val alarmDTOList: ArrayList<UserDTO.AlarmDTO> = arrayListOf()
 
+        // 알람 데이터 초기화
         init {
             val uid = FirebaseAuth.getInstance().currentUser!!.uid
 

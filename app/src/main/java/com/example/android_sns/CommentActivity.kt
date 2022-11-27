@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import model.ContentDTO
@@ -31,12 +32,11 @@ class CommentActivity : AppCompatActivity() {
         var firestore = FirebaseFirestore.getInstance()
 
         comment_recyclerview.adapter = CommentRecyclerviewAdapter()
-        comment_recyclerview.layoutManager = LinearLayoutManager(this).apply {
-            reverseLayout = true
-            stackFromEnd = true
-        }
+        comment_recyclerview.layoutManager = LinearLayoutManager(this)
 
         val comment_btn_send = findViewById<Button>(R.id.comment_btn_send)
+
+        // 댓글 작성 메소드
         comment_btn_send.setOnClickListener {
             var uid = auth.currentUser?.uid
             var comment = ContentDTO.CommentDTO()
@@ -60,6 +60,8 @@ class CommentActivity : AppCompatActivity() {
         }
 
     }
+
+    // 댓글 알림 생성 메소드
     fun commentAlarm(destinationUid: String, message: String) {
         // 알람 데이터 클래스 세팅
         var alarmDTO = UserDTO.AlarmDTO()
@@ -80,60 +82,64 @@ class CommentActivity : AppCompatActivity() {
                     .collection("alarms").document().set(alarmDTO)
             }
     }
-        inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            var comments: ArrayList<ContentDTO.CommentDTO> = arrayListOf()
 
-            init {
-                FirebaseFirestore.getInstance()
-                    .collection("images")
-                    .document(contentUid!!)
-                    .collection("comments")
-                    .orderBy("timestamp")
-                    .addSnapshotListener { querySnapShot, firebaseFirestoreException ->
-                        comments.clear()
-                        if (querySnapShot == null)
-                            return@addSnapshotListener
+    // 댓글 목록 리사이클러뷰
+    inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var comments: ArrayList<ContentDTO.CommentDTO> = arrayListOf()
 
-                        for (snapshot in querySnapShot.documents!!) {
-                            comments.add(snapshot.toObject(ContentDTO.CommentDTO::class.java)!!)
-                        }
-                        notifyDataSetChanged()
+        // 댓글 초기화
+        init {
+            FirebaseFirestore.getInstance()
+                .collection("images")
+                .document(contentUid!!)
+                .collection("comments")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener { querySnapShot, firebaseFirestoreException ->
+                    comments.clear()
+                    if (querySnapShot == null)
+                        return@addSnapshotListener
+
+                    for (snapshot in querySnapShot.documents!!) {
+                        comments.add(snapshot.toObject(ContentDTO.CommentDTO::class.java)!!)
                     }
-            }
-            override fun onCreateViewHolder(
-                parent: ViewGroup,
-                viewType: Int
-            ): RecyclerView.ViewHolder {
-                var view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_comment, parent, false)
-                return CustomViewHolder(view)
-            }
+                    notifyDataSetChanged()
+                }
+        }
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): RecyclerView.ViewHolder {
+            var view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_comment, parent, false)
+            return CustomViewHolder(view)
+        }
 
-            private inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
+        private inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-            override fun getItemCount(): Int {
-                return comments.size
-            }
+        override fun getItemCount(): Int {
+            return comments.size
+        }
 
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                var view = holder.itemView
-                view.commentviewitem_textview_comment.text = comments[position].comment
-                view.commentviewitem_textview_profile.text = comments[position].username
+        // 댓글 등록 -> 프로필 이미지, 유저 이름, 댓글 내용
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            var view = holder.itemView
+            view.commentviewitem_textview_comment.text = comments[position].comment
+            view.commentviewitem_textview_profile.text = comments[position].username
 
-                FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(comments[position].uid!!)
-                    .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val url = task.result!!["profileImageUrl"]
-                            if (url != null)
-                                Glide.with(holder.itemView.context).load(url)
-                                    .apply(RequestOptions().circleCrop())
-                                    .into(view.commentviewitem_imageview_profile)
-                        }
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(comments[position].uid!!)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val url = task.result!!["profileImageUrl"]
+                        if (url != null)
+                            Glide.with(holder.itemView.context).load(url)
+                                .apply(RequestOptions().circleCrop())
+                                .into(view.commentviewitem_imageview_profile)
                     }
-            }
+                }
         }
     }
+}
 

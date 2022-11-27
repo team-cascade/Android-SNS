@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.android_sns.databinding.ActivityMainBinding
@@ -14,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 동적권한 요청
+        // 저장소 동적권한 요청
         requestSinglePermission(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         bottomNavigationView = binding.bottomNavigation
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
             .commit()
 
+        // 게시글 업로드 후 메인화면으로 다시 바텀 네비게이션의 위치를 바꿈
         val getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
             }
 
         val goUploadIntent = Intent(this, UploadActivity::class.java)
+
+        // 바텀 네비 설정
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.detailViewFragment -> supportFragmentManager.beginTransaction()
@@ -66,14 +69,15 @@ class MainActivity : AppCompatActivity() {
             true
         } )
 
+        // 계정 없을 시 로그인 액티비티로 이동
         if (Firebase.auth.currentUser == null) {
             startActivity(
                 Intent(this, LoginActivity::class.java))
             finish()
         }
-        //bottomNavigationView!!.selectedItemId = R.id.homeFragment
     }
-
+    // SearchFragment에서 사용하는 메소드
+    // 검색 텍스트를 인자로 넘겨서 프로필 프래그먼트로 이동
     fun goProfileFragment(_uid: String?) {
                     var profileFragment = ProfileFragment()
                     var bundle = Bundle()
