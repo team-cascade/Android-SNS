@@ -75,7 +75,7 @@ class SearchFragment : Fragment() {
                 }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.search_detail,parent,false)
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_search,parent,false)
             return CustomViewHolder(view)
         }
 

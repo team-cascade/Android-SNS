@@ -16,13 +16,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.android.synthetic.main.item_detail.view.*
+import kotlinx.android.synthetic.main.item_feed.view.*
 import model.ContentDTO
 import model.UserDTO
 
 
 
-class DetailViewFragment : Fragment() {
+class FeedFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
     var uid : String ?= null
     var manager : LinearLayoutManager ?= null
@@ -30,17 +30,17 @@ class DetailViewFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail_view,container,false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_feed,container,false)
 
         firestore = FirebaseFirestore.getInstance()
         uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).adapter  = DetailViewRecyclerViewAdapter()
-        view.findViewById<RecyclerView>(R.id.detailviewfragment_recyclerview).layoutManager = LinearLayoutManager(activity)
+        view.findViewById<RecyclerView>(R.id.feed_fragment_recyclerview).adapter  = FeedRecyclerViewAdapter()
+        view.findViewById<RecyclerView>(R.id.feed_fragment_recyclerview).layoutManager = LinearLayoutManager(activity)
         return view
     }
     @SuppressLint("NotifyDataSetChanged")
-    inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class FeedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUIDList : ArrayList<String> = arrayListOf()
         var userUIDList : ArrayList<String> = arrayListOf()
@@ -70,7 +70,7 @@ class DetailViewFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail,parent,false)
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_feed,parent,false)
             return CustomViewHolder(view)
         }
 
@@ -86,36 +86,36 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            viewholder.findViewById<TextView>(R.id.detailviewitem_profile_textview).text = contentDTOs!![position].username
+            viewholder.findViewById<TextView>(R.id.feed_item_profile_textview).text = contentDTOs!![position].username
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
-                .into(viewholder.findViewById(R.id.detailviewitem_imageview_content))
+                .into(viewholder.findViewById(R.id.feed_item_imageview_content))
 
-            viewholder.findViewById<TextView>(R.id.detailviewitem_explain_textview).text = contentDTOs!![position].explain
+            viewholder.findViewById<TextView>(R.id.feed_item_explain_textview).text = contentDTOs!![position].explain
 
-            viewholder.findViewById<TextView>(R.id.detailviewitem_favoritecounter_textview).text =
+            viewholder.findViewById<TextView>(R.id.feed_item_favoritecounter_textview).text =
                 "좋아요 " + contentDTOs!![position].favoriteCount
 
             firestore?.collection("users")!!.document(userUIDList[position]).get()?.addOnSuccessListener {
                 if(it.get("profileImageUrl") != null)
                     Glide.with(holder.itemView.context).load(it.get("profileImageUrl").toString())
-                        .apply(RequestOptions().circleCrop()).into(viewholder.findViewById(R.id.detailviewitem_profile_image))
+                        .apply(RequestOptions().circleCrop()).into(viewholder.findViewById(R.id.feed_item_profile_image))
                 else
-                    viewholder.findViewById<ImageView>(R.id.detailviewitem_profile_image)
+                    viewholder.findViewById<ImageView>(R.id.feed_item_profile_image)
                         .setImageResource(R.drawable.ic_account)
             }
 
-            viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setOnClickListener {
+            viewholder.findViewById<ImageView>(R.id.feed_item_favorite_imageview).setOnClickListener {
                 favoriteEvent(position)
             }
             if(contentDTOs!![position].favorites.containsKey(uid)) {
-                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite)
+                viewholder.findViewById<ImageView>(R.id.feed_item_favorite_imageview).setImageResource(R.drawable.ic_favorite)
 
             }else {
-                viewholder.findViewById<ImageView>(R.id.detailviewitem_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
+                viewholder.findViewById<ImageView>(R.id.feed_item_favorite_imageview).setImageResource(R.drawable.ic_favorite_border)
             }
 
             // 게시글의 댓글을 볼 수 있는 activity
-            viewholder.detailviewitem_comment_imageview.setOnClickListener {  v ->
+            viewholder.feed_item_comment_imageview.setOnClickListener { v ->
                 var intent = Intent(v.context,CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUIDList[position])
                 intent.putExtra("destinationUid", contentDTOs[position].uid.toString())

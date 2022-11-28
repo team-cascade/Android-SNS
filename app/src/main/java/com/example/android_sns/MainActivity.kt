@@ -13,7 +13,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView = binding.bottomNavigation
 
-        supportFragmentManager.beginTransaction().add(R.id.fragment, DetailViewFragment())
+        supportFragmentManager.beginTransaction().add(R.id.fragment, FeedFragment())
             .commit()
 
         // 게시글 업로드 후 메인화면으로 다시 바텀 네비게이션의 위치를 바꿈
@@ -39,8 +38,8 @@ class MainActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment, DetailViewFragment()).commit()
-                    bottomNavigationView!!.selectedItemId = R.id.detailViewFragment
+                        .replace(R.id.fragment, FeedFragment()).commit()
+                    bottomNavigationView!!.selectedItemId = R.id.feedFragment
                 }
             }
 
@@ -49,8 +48,8 @@ class MainActivity : AppCompatActivity() {
         // 바텀 네비 설정
         bottomNavigationView?.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.detailViewFragment -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment, DetailViewFragment()).commit()
+                R.id.feedFragment -> supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment, FeedFragment()).commit()
                 R.id.searchFragment -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment, SearchFragment()).commit()
                 R.id.alarmFragment -> supportFragmentManager.beginTransaction()
