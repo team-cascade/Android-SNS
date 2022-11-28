@@ -185,8 +185,8 @@ class ProfileFragment() : Fragment() {
         firestore?.collection("users")?.document(uid!!)?.get()?.addOnSuccessListener {
             userDTO = it.toObject(UserDTO::class.java)!!
             if(userDTO!!.profileImageUrl != null)
-                fragmentView?.account_iv_profile?.context?.let { Glide.with(it).load(userDTO!!.profileImageUrl?.toUri())
-                    .apply(RequestOptions().circleCrop()).into(fragmentView.account_iv_profile) }
+                Glide.with(fragmentView.account_iv_profile.context).load(userDTO!!.profileImageUrl?.toUri())
+                    .apply(RequestOptions().circleCrop()).into(fragmentView.account_iv_profile)
         }
     }
     // 유저의 게시글을 보여주는 리사이클러뷰

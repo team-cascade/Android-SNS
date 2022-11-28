@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear">
+
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="225dp"
+        android:layout_height="225dp"
+        android:src="@drawable/ic_baseline_person_24"
+        />
+
+</androidx.wear.widget.BoxInsetLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear">
+
+    <EditText
+        android:id="@+id/textID"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="90dp"
+        android:background="#E1E1E1"
+        android:backgroundTint="#E1E1E1"
+        android:ems="10"
+        android:hint="@string/E_mail"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textColorHint="#BABABA"
+        android:textStyle="bold"
+        android:textSize="20px"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/textPWD"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="120dp"
+        android:background="#E1E1E1"
+        android:backgroundTint="#E1E1E1"
+        android:ems="50"
+        android:hint="@string/pw_hint"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textColorHint="#BABABA"
+        android:textStyle="bold"
+        android:textSize="20px"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="105dp"
+        android:text="로그인"
+        android:textSize="20px" />
+
+    <TextView
+        android:id="@+id/idTitle"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="90dp"
+        android:background="#3346B5"
+        android:gravity="center"
+        android:text="@string/ID_Email"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:textSize="20px" />
+
+    <TextView
+        android:id="@+id/pwTitle"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="120dp"
+        android:background="#3346B5"
+        android:gravity="center"
+        android:text="@string/pw"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:textSize="20px"/>
+
+    <TextView
+        android:id="@+id/loginErrorText"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="150dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#FB0A0A"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:textSize="20px"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/hs_daily" />
+</androidx.wear.widget.BoxInsetLayout>

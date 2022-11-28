@@ -6,9 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.android_sns.databinding.ActivityMainBinding
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.wearable.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
@@ -73,6 +76,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(this, LoginActivity::class.java))
             finish()
+        }
+
+        // WearOS로 auth 데이터 전송
+       else {
+            val token = FirebaseAuth.getInstance().currentUser!!.uid // auth token to transmit to the wearable device
+            val dataClient: DataClient = Wearable.getDataClient(applicationContext)
+            val putDataReq: PutDataRequest = PutDataMapRequest.create("/auth").run {
+                dataMap.putString("token", token)
+                asPutDataRequest()
+            }
+            val putDataTask: Task<DataItem> = dataClient.putDataItem(putDataReq).addOnCompleteListener {
+                Log.w("debug-1",it.result.toString())
+            }
         }
     }
     // SearchFragment에서 사용하는 메소드
